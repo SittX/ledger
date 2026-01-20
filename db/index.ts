@@ -1,4 +1,4 @@
-import "dotenv/config";
+import "../config/env"; // Load environment variables centrally
 import { drizzle } from "drizzle-orm/node-postgres";
 
 const db = drizzle({
