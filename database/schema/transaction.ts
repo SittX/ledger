@@ -1,9 +1,20 @@
-import { integer, numeric, serial, text, timestamp, varchar } from "drizzle-orm/pg-core";
+import {
+    integer,
+    numeric,
+    serial,
+    text,
+    timestamp,
+    varchar,
+} from "drizzle-orm/pg-core";
 import { appSchema } from "./schema";
 import { account } from "./account";
 import { category } from "./category";
 
-export const transactionTypes = appSchema.enum("transaction_types", ["expense", "income"]);
+export const transactionTypes = appSchema.enum("transaction_types", [
+    "expense",
+    "income",
+    "transfer",
+]);
 
 export const transaction = appSchema.table("transactions", {
     id: serial().primaryKey(),
@@ -15,5 +26,5 @@ export const transaction = appSchema.table("transactions", {
     categoryId: integer("category_id").references(() => category.id),
     accountId: integer("account_id").references(() => account.id),
     createdAt: timestamp().defaultNow(),
-    updatedAt: timestamp().$onUpdateFn(() => new Date())
-})
+    updatedAt: timestamp().$onUpdateFn(() => new Date()),
+});
