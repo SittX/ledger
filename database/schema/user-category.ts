@@ -1,8 +1,9 @@
 import { foreignKey, integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
 import { appSchema } from "./schema";
+import { profile } from "./profile";
 
-// System/base categories - no user_id, these are application-provided defaults
-export const category = pgTable("categories", {
+// User-defined categories - separate from system categories
+export const userCategory = pgTable("user_categories", {
     id: serial().primaryKey(),
     title: varchar({ length: 255 }).notNull(),
     description: varchar({ length: 255 }),
@@ -10,12 +11,13 @@ export const category = pgTable("categories", {
     icon: varchar({ length: 10 }),
     color: varchar({ length: 10 }).default("2fc2db"),
     parentId: integer("parent_id"),
+    userId: integer("user_id").references(() => profile.id).notNull(),
 },
     (table) => [
         foreignKey({
             columns: [table.parentId],
             foreignColumns: [table.id],
-            name: "category_parent_id_fk",
+            name: "user_category_parent_id_fk",
         }),
     ],
 );

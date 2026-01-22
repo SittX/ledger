@@ -1,11 +1,11 @@
-// Schema and auth references
-export { appSchema, authSchema, authUsers } from "./schema";
+// Schema
+export { appSchema } from "./schema";
 
 // Core tables
+export { profile } from "./profile";
 export { currency } from "./curency";
 export { category } from "./category";
 export { userCategory } from "./user-category";
-export { categoryAssociatedTitle } from "./category-associated-title";
 
 // Account related
 export { account, accountTypes } from "./account";

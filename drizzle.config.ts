@@ -21,7 +21,7 @@ export default defineConfig({
     migrations: {
         prefix: "timestamp",
         table: "__drizzle_migrations__",
-        schema: "app",
+        schema: "public",
     },
 
     breakpoints: true,

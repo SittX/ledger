@@ -1,30 +1,39 @@
 import {
+    boolean,
     integer,
     numeric,
+    pgTable,
     serial,
-    text,
     timestamp,
     varchar,
 } from "drizzle-orm/pg-core";
 import { appSchema } from "./schema";
-import { account } from "./account";
 import { category } from "./category";
+import { account } from "./account";
+import { profile } from "./profile";
 
-export const transactionTypes = appSchema.enum("transaction_types", [
-    "expense",
-    "income",
-    "transfer",
-]);
+// Forward references - these will be imported when needed
+// goal, subscription, attachment, payee tables
 
-export const transaction = appSchema.table("transactions", {
+export const transaction = pgTable("transactions", {
     id: serial().primaryKey(),
     title: varchar({ length: 255 }),
-    transactionType: transactionTypes("transaction_type"),
-    description: text(),
-    amount: numeric({ precision: 100, scale: 2 }),
-    transaction_datetime: timestamp().defaultNow(),
+    notes: varchar({ length: 255 }),
+    transactionType: varchar("transaction_type", { length: 20 }),
     categoryId: integer("category_id").references(() => category.id),
+    goalId: integer("goal_id"),
+    subscriptionId: integer("subscription_id"),
     accountId: integer("account_id").references(() => account.id),
-    createdAt: timestamp().defaultNow(),
-    updatedAt: timestamp().$onUpdateFn(() => new Date()),
+    amount: numeric({ precision: 12, scale: 2 }).notNull(),
+    transactionDate: timestamp("transaction_date"),
+    attachmentId: integer("attachment_id"),
+    userId: integer("user_id").references(() => profile.id).notNull(),
+    payeeId: integer("payee_id"),
+    status: varchar({ length: 20 }),
+    isDeleted: boolean("is_deleted").default(false),
+    reconciliationDate: timestamp("reconciliation_date"),
+    createdBy: integer("created_by").references(() => profile.id),
+    updatedBy: integer("updated_by").references(() => profile.id),
+    createdAt: timestamp("created_at").defaultNow(),
+    updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date()),
 });
