@@ -1,0 +1,329 @@
+# Agent Context Guide
+
+This document provides essential context for AI coding assistants (Cursor, GitHub Copilot, etc.) working on this project. Follow these standards and conventions when making code changes.
+
+## Project Overview
+
+**Ledger** is a personal finance management application built with Next.js, featuring:
+- Multi-currency account management
+- Transaction tracking and categorization
+- Budget planning and goal setting
+- Subscription management
+- Payee tracking
+- Financial reporting and analytics
+
+## Technology Stack
+
+### Core Framework
+- **Next.js 16.1.3** - React framework with App Router
+- **React 19.2.3** - UI library
+- **TypeScript 5** - Type safety
+
+### Database & ORM
+- **PostgreSQL** - Primary database
+- **Drizzle ORM 0.45.1** - Type-safe SQL ORM
+- **Supabase** - Authentication and database hosting
+- **Drizzle Kit** - Database migrations and introspection
+
+### UI & Styling
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **HeroUI 3.0.0-beta.5** - React component library
+- **Lucide React** - Icon library
+
+### Forms & Validation
+- **React Hook Form 7.71.1** - Form state management
+- **Zod 4.3.5** - Schema validation
+- **@hookform/resolvers** - Form validation integration
+
+### Authentication
+- **@supabase/ssr** - Server-side rendering support
+- **@supabase/supabase-js** - Supabase client
+
+## Project Structure
+
+```
+ledger/
+├── app/                    # Next.js App Router pages and layouts
+├── components/             # React components
+│   └── ui/                # Reusable UI components
+├── database/              # Database schema and migrations
+│   ├── schema/           # Drizzle ORM schema definitions
+│   ├── migration/        # Generated migration files
+│   └── index.ts          # Database exports
+├── config/                # Configuration files
+│   └── env.ts            # Environment variable loader
+├── utils/                 # Utility functions
+│   └── supabase/         # Supabase helpers
+└── public/                # Static assets
+```
+
+## Code Standards & Conventions
+
+### TypeScript
+
+1. **Strict Mode**: Always enabled. Use explicit types, avoid `any`.
+2. **Type Safety**: Leverage TypeScript's type system. Use Drizzle's inferred types.
+3. **Imports**: Use path aliases (`@/*` maps to project root).
+4. **Naming**:
+   - Components: PascalCase (`UserProfile.tsx`)
+   - Functions/variables: camelCase (`getUserData`)
+   - Constants: UPPER_SNAKE_CASE (`MAX_RETRIES`)
+   - Types/Interfaces: PascalCase (`UserProfile`, `AccountData`)
+
+### React & Next.js
+
+1. **Server Components First**: Default to Server Components unless client-side interactivity is needed.
+2. **Client Components**: Mark with `"use client"` directive at the top.
+3. **Async Components**: Use async/await in Server Components for data fetching.
+4. **Error Handling**: Implement error boundaries and proper error states.
+5. **Loading States**: Always provide loading states for async operations.
+6. **Props**: Use TypeScript interfaces for component props, prefer `interface` over `type` for extensibility.
+
+### Database Schema
+
+1. **Schema Location**: All schemas in `database/schema/*.ts`
+2. **Naming Conventions**:
+   - Tables: snake_case (`user_categories`)
+   - Columns: snake_case (`user_id`, `created_at`)
+   - TypeScript properties: camelCase (`userId`, `createdAt`)
+3. **Primary Keys**: Always use `serial().primaryKey()` for auto-incrementing IDs.
+4. **Timestamps**: 
+   - `created_at`: `timestamp().defaultNow()`
+   - `updated_at`: `timestamp().$onUpdateFn(() => new Date())`
+5. **Foreign Keys**: Use `.references()` for type-safe relationships.
+6. **Enums**: Use `pgEnum()` for PostgreSQL enums, defined before table usage.
+
+### Database Architecture
+
+**Profile-Based Architecture**:
+- `auth.users` (Supabase) → `profiles` (bridge table) → All application tables
+- All `user_id` columns reference `profiles.id` (integer), NOT `auth.users.id` (uuid)
+- This provides:
+  - Type consistency (integer IDs throughout app)
+  - Flexibility for future profile extensions
+  - Clean separation of auth and application data
+
+**Important Notes**:
+- `auth.users` is managed by Supabase - DO NOT create in migrations
+- Foreign keys to `auth.users.id` must be added manually in migrations
+- Always reference `profiles.id` in application tables
+
+### Migrations
+
+1. **Generation**: Use `npm run db:generate` to create migrations from schema changes.
+2. **Review**: Always review generated migrations before applying.
+3. **Manual Edits**: May be needed for:
+   - Supabase-managed tables (auth schema)
+   - Complex data transformations
+   - Custom constraints
+4. **Application**: Use `npm run db:migrate` to apply migrations.
+5. **Never**: Delete migration files once applied to production.
+
+### Environment Variables
+
+1. **Loading**: Use centralized loader in `config/env.ts`
+2. **Priority**: `.env.local` > `.env.development/.env.production` > `.env`
+3. **Validation**: Validate required env vars at startup.
+4. **Secrets**: Never commit `.env.local` or secrets to version control.
+
+### Forms & Validation
+
+1. **React Hook Form**: Use for all form state management.
+2. **Zod Schemas**: Define validation schemas with Zod.
+3. **Resolver**: Use `zodResolver` from `@hookform/resolvers`.
+4. **Error Handling**: Display validation errors clearly to users.
+5. **Loading States**: Disable submit buttons during form submission.
+
+### API Routes & Data Fetching
+
+1. **Server Actions**: Prefer Server Actions over API routes for mutations.
+2. **Route Handlers**: Use for external API integrations or webhooks.
+3. **Data Fetching**: Use async Server Components or Server Actions.
+4. **Error Handling**: Return proper HTTP status codes and error messages.
+5. **Validation**: Validate all inputs server-side, even if validated client-side.
+
+### Styling
+
+1. **Tailwind CSS**: Use utility classes, avoid custom CSS when possible.
+2. **Responsive Design**: Mobile-first approach with Tailwind breakpoints.
+3. **Component Library**: Use HeroUI components when available.
+4. **Icons**: Use Lucide React icons.
+5. **Colors**: Default color `#2fc2db` (cyan) for most entities.
+
+### Error Handling
+
+1. **User-Friendly Messages**: Never expose internal errors to users.
+2. **Logging**: Log errors server-side for debugging.
+3. **Error Boundaries**: Implement React error boundaries for client components.
+4. **Validation Errors**: Provide specific, actionable error messages.
+5. **Network Errors**: Handle gracefully with retry mechanisms where appropriate.
+
+### Security Best Practices
+
+1. **Authentication**: Always verify user authentication server-side.
+2. **Authorization**: Check user permissions before data access/modification.
+3. **Input Validation**: Validate and sanitize all user inputs.
+4. **SQL Injection**: Use Drizzle ORM (parameterized queries) - never raw SQL with user input.
+5. **XSS Prevention**: Use React's built-in XSS protection, sanitize user-generated content.
+6. **CSRF Protection**: Next.js provides built-in CSRF protection for Server Actions.
+7. **Environment Variables**: Never expose secrets in client-side code.
+
+### Performance
+
+1. **Code Splitting**: Leverage Next.js automatic code splitting.
+2. **Image Optimization**: Use `next/image` for images.
+3. **Database Queries**: 
+   - Use indexes for frequently queried columns
+   - Avoid N+1 queries (use joins or batch queries)
+   - Limit result sets with pagination
+4. **Caching**: Use Next.js caching strategies appropriately.
+5. **Bundle Size**: Monitor and optimize bundle size.
+
+### Testing Considerations
+
+1. **Type Safety**: TypeScript provides compile-time safety.
+2. **Schema Validation**: Use Zod schemas for runtime validation.
+3. **Database**: Consider using test database for integration tests.
+4. **Mocking**: Mock Supabase client for unit tests.
+
+## Common Patterns
+
+### Database Query Pattern
+
+```typescript
+import { db } from "@/database";
+import { accounts } from "@/database/schema";
+import { eq } from "drizzle-orm";
+
+// Server Component or Server Action
+async function getUserAccounts(userId: number) {
+  return await db
+    .select()
+    .from(accounts)
+    .where(eq(accounts.userId, userId));
+}
+```
+
+### Form Pattern
+
+```typescript
+"use client";
+
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+
+const schema = z.object({
+  title: z.string().min(1, "Title is required"),
+  amount: z.number().positive("Amount must be positive"),
+});
+
+type FormData = z.infer<typeof schema>;
+
+export function TransactionForm() {
+  const form = useForm<FormData>({
+    resolver: zodResolver(schema),
+  });
+
+  // Form implementation...
+}
+```
+
+### Server Action Pattern
+
+```typescript
+"use server";
+
+import { db } from "@/database";
+import { transactions } from "@/database/schema";
+import { revalidatePath } from "next/cache";
+
+export async function createTransaction(data: TransactionInput) {
+  // Validate input
+  // Check authentication
+  // Insert into database
+  // Revalidate relevant paths
+  revalidatePath("/transactions");
+}
+```
+
+## File Naming Conventions
+
+- **Components**: PascalCase (`UserProfile.tsx`, `AccountCard.tsx`)
+- **Utilities**: camelCase (`formatCurrency.ts`, `dateUtils.ts`)
+- **Types**: PascalCase (`types.ts` or co-located with components)
+- **Constants**: UPPER_SNAKE_CASE (`API_ENDPOINTS.ts`)
+- **Hooks**: camelCase with `use` prefix (`useAccounts.ts`, `useTransactions.ts`)
+
+## Git & Version Control
+
+1. **Commits**: Write clear, descriptive commit messages.
+2. **Branches**: Use feature branches for new features.
+3. **PRs**: Keep pull requests focused and reviewable.
+4. **Never Commit**: 
+   - `.env.local` or any secrets
+   - `node_modules/`
+   - Generated files (unless necessary)
+   - Migration files that haven't been reviewed
+
+## Documentation
+
+1. **Code Comments**: Explain "why", not "what" (code should be self-documenting).
+2. **Complex Logic**: Add comments for non-obvious business logic.
+3. **API Documentation**: Document Server Actions and API routes.
+4. **Schema Documentation**: See `database/DATABASE_SCHEMA.md` for database documentation.
+
+## When Making Changes
+
+1. **Check Existing Patterns**: Look for similar implementations in the codebase.
+2. **Maintain Consistency**: Follow existing code style and patterns.
+3. **Update Types**: Ensure TypeScript types are updated with schema changes.
+4. **Test Locally**: Test changes before committing.
+5. **Update Documentation**: Update relevant documentation if making significant changes.
+
+## Common Pitfalls to Avoid
+
+1. ❌ **Don't** create `auth.users` table in migrations (Supabase manages it)
+2. ❌ **Don't** use `any` type - use proper TypeScript types
+3. ❌ **Don't** expose secrets in client-side code
+4. ❌ **Don't** skip input validation
+5. ❌ **Don't** forget to handle loading and error states
+6. ❌ **Don't** commit migration files without reviewing them
+7. ❌ **Don't** use raw SQL with user input (use Drizzle ORM)
+8. ❌ **Don't** forget to revalidate paths after mutations
+
+## Resources
+
+- **Next.js Docs**: https://nextjs.org/docs
+- **Drizzle ORM Docs**: https://orm.drizzle.team/docs/overview
+- **Supabase Docs**: https://supabase.com/docs
+- **React Hook Form**: https://react-hook-form.com/
+- **Zod**: https://zod.dev/
+- **Tailwind CSS**: https://tailwindcss.com/docs
+- **Database Schema**: See `database/DATABASE_SCHEMA.md`
+
+## Quick Reference
+
+### Database Commands
+```bash
+npm run db:generate  # Generate migration from schema changes
+npm run db:migrate   # Apply pending migrations
+```
+
+### Development
+```bash
+npm run dev    # Start development server
+npm run build  # Build for production
+npm run lint   # Run ESLint
+```
+
+### Key Files
+- `database/schema/` - All database schema definitions
+- `database/DATABASE_SCHEMA.md` - Complete database documentation
+- `config/env.ts` - Environment variable configuration
+- `drizzle.config.ts` - Drizzle ORM configuration
+
+---
+
+**Last Updated**: 2026-01-22
+**Project Version**: 0.1.0
