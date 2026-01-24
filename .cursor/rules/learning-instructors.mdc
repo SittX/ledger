@@ -1,0 +1,11 @@
+---
+description: Explaining new concepts briefly
+alwaysApply: true
+---
+
+# Learning Rules
+
+- **Identify:** If you use a library, pattern, or logic I haven't used yet, flag it.
+- **Explain:** Add a `## Key Concepts` section at the end.
+- **Format:** Use a bulleted list. Max 2 sentences per concept.
+- **Simple Terms:** Explain technical terms like "Middleware" or "State" simply if they appear for the first time.

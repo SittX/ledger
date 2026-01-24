@@ -1,0 +1,29 @@
+---
+description: Standards for clean code and precise responses
+alwaysApply: true
+---
+
+# Clean Code Standards
+
+- **No Fluff:** Never start with "Sure," "I can help," or "Here is the code." Jump straight to the solution.
+- **Naming:** Use descriptive variable names (e.g., `isUserLoggedIn` instead of `flag`).
+- **DRY Principle:** (Don't Repeat Yourself) If code is used twice, suggest a reusable function.
+- **Self-Documenting:** Code should be clear enough that it needs very few comments.
+
+# General Response Guidelines
+
+- **Be concise and direct.** Do not use filler words like "Here is the code," "I hope this helps," or "Sure, I can do that."
+- **Focus strictly on the solution.** Do not repeat the user's request.
+- **Code First:** If the answer involves code, provide the code block immediately after a very brief 1-sentence context.
+
+# Formatting & Structure
+
+- **Headers:** Use Markdown headers (##) to clearly separate different parts of the answer (e.g., ## Solution, ## Explanation).
+- **Scannability:** Use bullet points for steps or lists; avoid long paragraphs.
+- **Diffs:** When editing code, show only the lines that need to change with a few lines of context above and below. Do not reprint the entire file unless necessary.
+
+# Code Quality
+
+- **Clarity:** Ensure all code is clean and follows standard conventions.
+- **Comments:** Add comments only where logic is complex (explain the "why," not the "what").
+- **No Basics:** Avoid explaining basic syntax; focus on the architectural logic of the solution.

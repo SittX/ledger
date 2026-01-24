@@ -27,43 +27,7 @@ import {
   ChartPie,
   Tags,
 } from "lucide-react";
-
-interface MenuItem {
-  name: string;
-  href: string;
-  icon: React.ComponentType<{ className?: string }>;
-  order: number;
-}
-
-interface MenuSection {
-  title: string;
-  items: MenuItem[];
-}
-
-const menuSections: MenuSection[] = [
-  {
-    title: "TRANSACTIONS",
-    items: [
-      { name: "Home", href: "/", icon: Home, order: 1 },
-      { name: "History", href: "/transaction", icon: ChartColumn, order: 2 },
-    ],
-  },
-  {
-    title: "MANAGEMENT",
-    items: [
-      { name: "Account", href: "/account", icon: Wallet, order: 3 },
-      { name: "Category", href: "/category", icon: Tags, order: 4 },
-      {
-        name: "Subscription",
-        href: "/subscription",
-        icon: BellRing,
-        order: 5,
-      },
-      { name: "Budget", href: "/budget", icon: ChartPie, order: 6 },
-      { name: "Goal", href: "/goal", icon: Calendar1, order: 7 },
-    ],
-  },
-];
+import { menuSections } from "@/config/menus";
 
 interface SidebarProps {
   className?: string;

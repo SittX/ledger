@@ -1,0 +1,11 @@
+---
+description: Tailwind CSS styling rules
+alwaysApply: true
+---
+
+# Tailwind Standards
+
+- **Consistency:** Use Tailwind classes for all styling. Avoid custom CSS files or inline `style={{}}` tags.
+- **HeroUI Customization:** Use the `classNames` prop or `className` for HeroUI components to apply custom Tailwind tweaks.
+- **Order:** Follow a logical order for classes: Layout (flex, grid) -> Spacing (p, m) -> Typography (text) -> Visual (bg, border).
+- **Dark Mode:** Always consider dark mode utility classes (e.g., `dark:bg-black`).

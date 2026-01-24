@@ -1,3 +1,7 @@
+---
+alwaysApply: true
+---
+
 # Agent Context Guide
 
 This document provides essential context for AI coding assistants (Cursor, GitHub Copilot, etc.) working on this project. Follow these standards and conventions when making code changes.
@@ -5,6 +9,7 @@ This document provides essential context for AI coding assistants (Cursor, GitHu
 ## Project Overview
 
 **Ledger** is a personal finance management application built with Next.js, featuring:
+
 - Multi-currency account management
 - Transaction tracking and categorization
 - Budget planning and goal setting
@@ -15,27 +20,32 @@ This document provides essential context for AI coding assistants (Cursor, GitHu
 ## Technology Stack
 
 ### Core Framework
+
 - **Next.js 16.1.3** - React framework with App Router
 - **React 19.2.3** - UI library
 - **TypeScript 5** - Type safety
 
 ### Database & ORM
+
 - **PostgreSQL** - Primary database
 - **Drizzle ORM 0.45.1** - Type-safe SQL ORM
 - **Supabase** - Authentication and database hosting
 - **Drizzle Kit** - Database migrations and introspection
 
 ### UI & Styling
+
 - **Tailwind CSS 4** - Utility-first CSS framework
 - **HeroUI 3.0.0-beta.5** - React component library
 - **Lucide React** - Icon library
 
 ### Forms & Validation
+
 - **React Hook Form 7.71.1** - Form state management
 - **Zod 4.3.5** - Schema validation
 - **@hookform/resolvers** - Form validation integration
 
 ### Authentication
+
 - **@supabase/ssr** - Server-side rendering support
 - **@supabase/supabase-js** - Supabase client
 
@@ -87,7 +97,7 @@ ledger/
    - Columns: snake_case (`user_id`, `created_at`)
    - TypeScript properties: camelCase (`userId`, `createdAt`)
 3. **Primary Keys**: Always use `serial().primaryKey()` for auto-incrementing IDs.
-4. **Timestamps**: 
+4. **Timestamps**:
    - `created_at`: `timestamp().defaultNow()`
    - `updated_at`: `timestamp().$onUpdateFn(() => new Date())`
 5. **Foreign Keys**: Use `.references()` for type-safe relationships.
@@ -96,6 +106,7 @@ ledger/
 ### Database Architecture
 
 **Profile-Based Architecture**:
+
 - `auth.users` (Supabase) → `profiles` (bridge table) → All application tables
 - All `user_id` columns reference `profiles.id` (integer), NOT `auth.users.id` (uuid)
 - This provides:
@@ -104,6 +115,7 @@ ledger/
   - Clean separation of auth and application data
 
 **Important Notes**:
+
 - `auth.users` is managed by Supabase - DO NOT create in migrations
 - Foreign keys to `auth.users.id` must be added manually in migrations
 - Always reference `profiles.id` in application tables
@@ -172,7 +184,7 @@ ledger/
 
 1. **Code Splitting**: Leverage Next.js automatic code splitting.
 2. **Image Optimization**: Use `next/image` for images.
-3. **Database Queries**: 
+3. **Database Queries**:
    - Use indexes for frequently queried columns
    - Avoid N+1 queries (use joins or batch queries)
    - Limit result sets with pagination
@@ -197,10 +209,7 @@ import { eq } from "drizzle-orm";
 
 // Server Component or Server Action
 async function getUserAccounts(userId: number) {
-  return await db
-    .select()
-    .from(accounts)
-    .where(eq(accounts.userId, userId));
+  return await db.select().from(accounts).where(eq(accounts.userId, userId));
 }
 ```
 
@@ -260,7 +269,7 @@ export async function createTransaction(data: TransactionInput) {
 1. **Commits**: Write clear, descriptive commit messages.
 2. **Branches**: Use feature branches for new features.
 3. **PRs**: Keep pull requests focused and reviewable.
-4. **Never Commit**: 
+4. **Never Commit**:
    - `.env.local` or any secrets
    - `node_modules/`
    - Generated files (unless necessary)
@@ -305,12 +314,14 @@ export async function createTransaction(data: TransactionInput) {
 ## Quick Reference
 
 ### Database Commands
+
 ```bash
 npm run db:generate  # Generate migration from schema changes
 npm run db:migrate   # Apply pending migrations
 ```
 
 ### Development
+
 ```bash
 npm run dev    # Start development server
 npm run build  # Build for production
@@ -318,6 +329,7 @@ npm run lint   # Run ESLint
 ```
 
 ### Key Files
+
 - `database/schema/` - All database schema definitions
 - `database/DATABASE_SCHEMA.md` - Complete database documentation
 - `config/env.ts` - Environment variable configuration
