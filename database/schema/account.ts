@@ -19,6 +19,8 @@ export const accountTypes = pgEnum("account_types", [
 
 export const account = pgTable("accounts", {
     id: serial().primaryKey(),
+    title: varchar({ length: 255 }).notNull(),
+    description: varchar({ length: 500 }),
     accountType: accountTypes("account_type").default("current"),
     balance: numeric({ precision: 12, scale: 2 }),
     isPrimaryAccount: boolean("is_primary_account").default(false),

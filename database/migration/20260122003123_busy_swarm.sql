@@ -165,18 +165,6 @@ CREATE TABLE "user_categories" (
 	"user_id" integer NOT NULL
 );
 --> statement-breakpoint
-DROP TABLE "app"."accounts" CASCADE;--> statement-breakpoint
-DROP TABLE "app"."attachments" CASCADE;--> statement-breakpoint
-DROP TABLE "app"."budgets" CASCADE;--> statement-breakpoint
-DROP TABLE "app"."categories" CASCADE;--> statement-breakpoint
-DROP TABLE "app"."currency" CASCADE;--> statement-breakpoint
-DROP TABLE "app"."goals" CASCADE;--> statement-breakpoint
-DROP TABLE "app"."payees" CASCADE;--> statement-breakpoint
-DROP TABLE "app"."profiles" CASCADE;--> statement-breakpoint
-DROP TABLE "app"."subscriptions" CASCADE;--> statement-breakpoint
-DROP TABLE "app"."transactions" CASCADE;--> statement-breakpoint
-DROP TABLE "app"."transfers" CASCADE;--> statement-breakpoint
-DROP TABLE "app"."user_categories" CASCADE;--> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_currency_code_id_currency_id_fk" FOREIGN KEY ("currency_code_id") REFERENCES "public"."currency"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_profiles_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_created_by_profiles_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
@@ -198,8 +186,4 @@ ALTER TABLE "transactions" ADD CONSTRAINT "transactions_updated_by_profiles_id_f
 ALTER TABLE "transfers" ADD CONSTRAINT "transfers_from_account_id_accounts_id_fk" FOREIGN KEY ("from_account_id") REFERENCES "public"."accounts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "transfers" ADD CONSTRAINT "transfers_to_account_id_accounts_id_fk" FOREIGN KEY ("to_account_id") REFERENCES "public"."accounts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "user_categories" ADD CONSTRAINT "user_categories_user_id_profiles_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "user_categories" ADD CONSTRAINT "user_category_parent_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."user_categories"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-DROP TYPE "app"."account_types";--> statement-breakpoint
-DROP TYPE "app"."attachment_type";--> statement-breakpoint
-DROP TYPE "app"."recurring_frequency";--> statement-breakpoint
-DROP TYPE "app"."subscription_type";
+ALTER TABLE "user_categories" ADD CONSTRAINT "user_category_parent_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."user_categories"("id") ON DELETE no action ON UPDATE no action;

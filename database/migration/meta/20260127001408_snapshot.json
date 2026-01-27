@@ -1,12 +1,12 @@
 {
-  "id": "f49557d1-081f-4d2d-98d4-3d082da98bd2",
-  "prevId": "95136cda-ae19-4b3c-8fc6-2abbd5599bae",
+  "id": "c9d129de-a4b1-4a22-9479-0aee4f00f621",
+  "prevId": "606f8744-ba2d-4b4b-a24b-33bbe432ac34",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "app.accounts": {
+    "public.accounts": {
       "name": "accounts",
-      "schema": "app",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
@@ -14,10 +14,22 @@
           "primaryKey": true,
           "notNull": true
         },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
+        },
         "account_type": {
           "name": "account_type",
           "type": "account_types",
-          "typeSchema": "app",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false,
           "default": "'current'"
@@ -119,7 +131,6 @@
           "name": "accounts_user_id_profiles_id_fk",
           "tableFrom": "accounts",
           "tableTo": "profiles",
-          "schemaTo": "app",
           "columnsFrom": [
             "user_id"
           ],
@@ -133,7 +144,6 @@
           "name": "accounts_created_by_profiles_id_fk",
           "tableFrom": "accounts",
           "tableTo": "profiles",
-          "schemaTo": "app",
           "columnsFrom": [
             "created_by"
           ],
@@ -147,7 +157,6 @@
           "name": "accounts_updated_by_profiles_id_fk",
           "tableFrom": "accounts",
           "tableTo": "profiles",
-          "schemaTo": "app",
           "columnsFrom": [
             "updated_by"
           ],
@@ -164,9 +173,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "app.attachments": {
+    "public.attachments": {
       "name": "attachments",
-      "schema": "app",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
@@ -177,7 +186,7 @@
         "attachment_type": {
           "name": "attachment_type",
           "type": "attachment_type",
-          "typeSchema": "app",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -221,9 +230,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "app.budgets": {
+    "public.budgets": {
       "name": "budgets",
-      "schema": "app",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
@@ -277,7 +286,7 @@
         "recurring_frequency": {
           "name": "recurring_frequency",
           "type": "recurring_frequency",
-          "typeSchema": "app",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -353,7 +362,6 @@
           "name": "budgets_category_id_categories_id_fk",
           "tableFrom": "budgets",
           "tableTo": "categories",
-          "schemaTo": "app",
           "columnsFrom": [
             "category_id"
           ],
@@ -367,7 +375,6 @@
           "name": "budgets_user_id_profiles_id_fk",
           "tableFrom": "budgets",
           "tableTo": "profiles",
-          "schemaTo": "app",
           "columnsFrom": [
             "user_id"
           ],
@@ -384,9 +391,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "app.categories": {
+    "public.categories": {
       "name": "categories",
-      "schema": "app",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
@@ -438,7 +445,6 @@
           "name": "category_parent_id_fk",
           "tableFrom": "categories",
           "tableTo": "categories",
-          "schemaTo": "app",
           "columnsFrom": [
             "parent_id"
           ],
@@ -507,9 +513,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "app.goals": {
+    "public.goals": {
       "name": "goals",
-      "schema": "app",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
@@ -600,7 +606,6 @@
           "name": "goals_category_id_categories_id_fk",
           "tableFrom": "goals",
           "tableTo": "categories",
-          "schemaTo": "app",
           "columnsFrom": [
             "category_id"
           ],
@@ -614,7 +619,6 @@
           "name": "goals_user_id_profiles_id_fk",
           "tableFrom": "goals",
           "tableTo": "profiles",
-          "schemaTo": "app",
           "columnsFrom": [
             "user_id"
           ],
@@ -631,9 +635,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "app.payees": {
+    "public.payees": {
       "name": "payees",
-      "schema": "app",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
@@ -698,7 +702,6 @@
           "name": "payees_user_id_profiles_id_fk",
           "tableFrom": "payees",
           "tableTo": "profiles",
-          "schemaTo": "app",
           "columnsFrom": [
             "user_id"
           ],
@@ -715,9 +718,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "app.profiles": {
+    "public.profiles": {
       "name": "profiles",
-      "schema": "app",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
@@ -786,9 +789,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "app.subscriptions": {
+    "public.subscriptions": {
       "name": "subscriptions",
-      "schema": "app",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
@@ -817,7 +820,7 @@
         "subscription_type": {
           "name": "subscription_type",
           "type": "subscription_type",
-          "typeSchema": "app",
+          "typeSchema": "public",
           "primaryKey": false,
           "notNull": false
         },
@@ -859,7 +862,6 @@
           "name": "subscriptions_category_id_categories_id_fk",
           "tableFrom": "subscriptions",
           "tableTo": "categories",
-          "schemaTo": "app",
           "columnsFrom": [
             "category_id"
           ],
@@ -873,7 +875,6 @@
           "name": "subscriptions_user_id_profiles_id_fk",
           "tableFrom": "subscriptions",
           "tableTo": "profiles",
-          "schemaTo": "app",
           "columnsFrom": [
             "user_id"
           ],
@@ -890,9 +891,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "app.transactions": {
+    "public.transactions": {
       "name": "transactions",
-      "schema": "app",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
@@ -1023,7 +1024,6 @@
           "name": "transactions_category_id_categories_id_fk",
           "tableFrom": "transactions",
           "tableTo": "categories",
-          "schemaTo": "app",
           "columnsFrom": [
             "category_id"
           ],
@@ -1037,7 +1037,6 @@
           "name": "transactions_account_id_accounts_id_fk",
           "tableFrom": "transactions",
           "tableTo": "accounts",
-          "schemaTo": "app",
           "columnsFrom": [
             "account_id"
           ],
@@ -1051,7 +1050,6 @@
           "name": "transactions_user_id_profiles_id_fk",
           "tableFrom": "transactions",
           "tableTo": "profiles",
-          "schemaTo": "app",
           "columnsFrom": [
             "user_id"
           ],
@@ -1065,7 +1063,6 @@
           "name": "transactions_created_by_profiles_id_fk",
           "tableFrom": "transactions",
           "tableTo": "profiles",
-          "schemaTo": "app",
           "columnsFrom": [
             "created_by"
           ],
@@ -1079,7 +1076,6 @@
           "name": "transactions_updated_by_profiles_id_fk",
           "tableFrom": "transactions",
           "tableTo": "profiles",
-          "schemaTo": "app",
           "columnsFrom": [
             "updated_by"
           ],
@@ -1096,9 +1092,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "app.transfers": {
+    "public.transfers": {
       "name": "transfers",
-      "schema": "app",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
@@ -1149,7 +1145,6 @@
           "name": "transfers_from_account_id_accounts_id_fk",
           "tableFrom": "transfers",
           "tableTo": "accounts",
-          "schemaTo": "app",
           "columnsFrom": [
             "from_account_id"
           ],
@@ -1163,7 +1158,6 @@
           "name": "transfers_to_account_id_accounts_id_fk",
           "tableFrom": "transfers",
           "tableTo": "accounts",
-          "schemaTo": "app",
           "columnsFrom": [
             "to_account_id"
           ],
@@ -1180,9 +1174,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "app.user_categories": {
+    "public.user_categories": {
       "name": "user_categories",
-      "schema": "app",
+      "schema": "",
       "columns": {
         "id": {
           "name": "id",
@@ -1240,7 +1234,6 @@
           "name": "user_categories_user_id_profiles_id_fk",
           "tableFrom": "user_categories",
           "tableTo": "profiles",
-          "schemaTo": "app",
           "columnsFrom": [
             "user_id"
           ],
@@ -1254,7 +1247,6 @@
           "name": "user_category_parent_id_fk",
           "tableFrom": "user_categories",
           "tableTo": "user_categories",
-          "schemaTo": "app",
           "columnsFrom": [
             "parent_id"
           ],
@@ -1292,27 +1284,27 @@
     }
   },
   "enums": {
-    "app.account_types": {
+    "public.account_types": {
       "name": "account_types",
-      "schema": "app",
+      "schema": "public",
       "values": [
         "current",
         "saving",
         "investment"
       ]
     },
-    "app.attachment_type": {
+    "public.attachment_type": {
       "name": "attachment_type",
-      "schema": "app",
+      "schema": "public",
       "values": [
         "photo",
         "file",
         "document"
       ]
     },
-    "app.recurring_frequency": {
+    "public.recurring_frequency": {
       "name": "recurring_frequency",
-      "schema": "app",
+      "schema": "public",
       "values": [
         "daily",
         "weekly",
@@ -1320,9 +1312,9 @@
         "yearly"
       ]
     },
-    "app.subscription_type": {
+    "public.subscription_type": {
       "name": "subscription_type",
-      "schema": "app",
+      "schema": "public",
       "values": [
         "monthly",
         "yearly",

@@ -4,37 +4,16 @@
   "entries": [
     {
       "idx": 0,
-      "version": "7",
-      "when": 1768868718847,
-      "tag": "20260120002518_aspiring_red_wolf",
+      "version": "1",
+      "when": 1769041883471,
+      "tag": "20260122003123_busy_swarm",
       "breakpoints": true
     },
     {
       "idx": 1,
-      "version": "7",
-      "when": 1768976821190,
-      "tag": "20260121062701_strong_jazinda",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1769041020034,
-      "tag": "20260122001700_burly_mattie_franklin",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1769041165842,
-      "tag": "20260122001925_demonic_scorpion",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1769041883471,
-      "tag": "20260122003123_busy_swarm",
+      "version": "1",
+      "when": 1769472848037,
+      "tag": "20260127001408_abnormal_whirlwind",
       "breakpoints": true
     }
   ]
