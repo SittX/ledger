@@ -4,28 +4,17 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import NextLink from "next/link";
-import { Button, Switch, Avatar, Separator } from "@heroui/react";
+import { Button } from "@heroui/button";
+import { Switch } from "@heroui/switch";
+import { Avatar } from "@heroui/avatar";
+import { Divider } from "@heroui/divider";
+
 import {
   ChevronLeft,
   ChevronRight,
-  Home,
-  Receipt,
-  Wallet,
-  FolderTree,
   Settings,
   Moon,
   LogOut,
-  User,
-  SubscriptIcon,
-  Calendar1,
-  CreditCardIcon,
-  PiggyBank,
-  ChartCandlestick,
-  FileClock,
-  ChartColumn,
-  BellRing,
-  ChartPie,
-  Tags,
 } from "lucide-react";
 import { menuSections } from "@/config/menus";
 
@@ -54,7 +43,7 @@ export default function Sidebar({ className }: SidebarProps) {
       className={cn(
         "flex flex-col h-screen bg-background border-r border-divider transition-all duration-300 ease-in-out",
         isCollapsed ? "w-16" : "w-64",
-        className
+        className,
       )}
     >
       {/* Header Section */}
@@ -117,14 +106,14 @@ export default function Sidebar({ className }: SidebarProps) {
                       "hover:bg-default-100",
                       active && "bg-primary/10 text-primary font-medium",
                       !active && "text-foreground",
-                      isCollapsed && "justify-center px-2"
+                      isCollapsed && "justify-center px-2",
                     )}
                   >
                     <Icon
                       className={cn(
                         "w-5 h-5",
                         active && "text-primary",
-                        !active && "text-default-600"
+                        !active && "text-default-600",
                       )}
                     />
                     {!isCollapsed && (
@@ -137,7 +126,7 @@ export default function Sidebar({ className }: SidebarProps) {
               })}
             </div>
             {sectionIndex < menuSections.length - 1 && !isCollapsed && (
-              <Separator className="mt-4 mx-4" />
+              <Divider className="mt-4 mx-4" />
             )}
           </div>
         ))}
@@ -152,20 +141,20 @@ export default function Sidebar({ className }: SidebarProps) {
               "flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg transition-colors",
               "hover:bg-default-100 text-foreground",
               isActive("/settings") && "bg-primary/10 text-primary font-medium",
-              isCollapsed && "justify-center px-2"
+              isCollapsed && "justify-center px-2",
             )}
           >
             <Settings
               className={cn(
                 "w-5 h-5",
-                isActive("/settings") ? "text-primary" : "text-default-600"
+                isActive("/settings") ? "text-primary" : "text-default-600",
               )}
             />
             {!isCollapsed && (
               <span
                 className={cn(
                   "text-sm",
-                  isActive("/settings") && "font-medium"
+                  isActive("/settings") && "font-medium",
                 )}
               >
                 Settings
@@ -176,7 +165,7 @@ export default function Sidebar({ className }: SidebarProps) {
           <div
             className={cn(
               "flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg",
-              isCollapsed && "justify-center px-2"
+              isCollapsed && "justify-center px-2",
             )}
           >
             <Moon className="w-5 h-5 text-default-600" />
