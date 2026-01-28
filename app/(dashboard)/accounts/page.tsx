@@ -38,7 +38,7 @@ export default function AccountPage() {
           </p>
         </div>
         <div>
-          <button className="btn">
+          <button className="btn btn-primary">
             Create new Account <Plus />
           </button>
         </div>
@@ -46,8 +46,8 @@ export default function AccountPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {accounts.map((account) => (
-          <div key={account.id} className="card min-w-60 max-w-100">
-            <div className="card-title flex flex-row items-center justify-between">
+          <div key={account.id} className="card card-border border-white min-w-60 max-w-100 p-3">
+            <div className="card-title flex items-center justify-between">
               <div className="flex flex-col">
                 <DollarSign />
                 <p className="text-xl font-bold">{account.name}</p>
@@ -58,21 +58,21 @@ export default function AccountPage() {
                   <Star />
                 </button>
               </div>
-            </CardHeader>
-            <CardBody>
+            </div>
+            <div className="card-body">
               <p className="text-2xl text-default-200">${account.balance}</p>
-            </CardBody>
-            <CardFooter>
-              <div className="flex gap-3">
-                <Button variant="flat" color="primary">
-                  View Details
-                </Button>
-                <Button variant="flat" color="secondary">
-                  Add Transaction
-                </Button>
               </div>
-            </CardFooter>
-          </Card>
+            <div className="card-actions">
+              <div className="flex gap-3">
+                <button className="btn btn-primary">
+                  View Details
+                </button>
+                <button className="btn btn-secondary">
+                  Add Transaction
+                </button>
+              </div>
+            </div>
+          </div>
         ))}
       </div>
     </div>

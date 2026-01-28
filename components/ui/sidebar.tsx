@@ -4,10 +4,6 @@ import { useState } from "react";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import NextLink from "next/link";
-import { Button } from "@heroui/button";
-import { Switch } from "@heroui/switch";
-import { Avatar } from "@heroui/avatar";
-import { Divider } from "@heroui/divider";
 
 import {
   ChevronLeft,
@@ -63,20 +59,17 @@ export default function Sidebar({ className }: SidebarProps) {
             <span className="text-primary-foreground font-bold text-sm">L</span>
           </div>
         )}
-        <Button
-          isIconOnly
-          variant="ghost"
-          size="sm"
-          onPress={toggleSidebar}
+        <button
+          onClick={toggleSidebar}
           aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="ml-auto"
+          className="btn ml-auto"
         >
           {isCollapsed ? (
             <ChevronRight className="w-4 h-4" />
           ) : (
             <ChevronLeft className="w-4 h-4" />
           )}
-        </Button>
+        </button>
       </div>
 
       {/* Navigation Sections */}
@@ -126,7 +119,7 @@ export default function Sidebar({ className }: SidebarProps) {
               })}
             </div>
             {sectionIndex < menuSections.length - 1 && !isCollapsed && (
-              <Divider className="mt-4 mx-4" />
+              <div className="divider mt-4 mx-4" />
             )}
           </div>
         ))}
@@ -174,22 +167,22 @@ export default function Sidebar({ className }: SidebarProps) {
                 <span className="text-sm text-foreground flex-1">
                   Dark mode
                 </span>
-                <Switch
+                {/* <button
                   isSelected={isDarkMode}
                   onChange={() => setIsDarkMode(!isDarkMode)}
                   size="sm"
                   aria-label="Toggle dark mode"
-                />
+                /> */}
               </>
             )}
             {isCollapsed && (
-              <Switch
-                isSelected={isDarkMode}
-                onChange={() => setIsDarkMode(!isDarkMode)}
-                size="sm"
-                aria-label="Toggle dark mode"
-                className="absolute"
-              />
+              // <Switch
+              //   isSelected={isDarkMode}
+              //   onChange={() => setIsDarkMode(!isDarkMode)}
+              //   size="sm"
+              //   aria-label="Toggle dark mode"
+              // />
+              <button/>
             )}
           </div>
         </div>
@@ -209,33 +202,32 @@ export default function Sidebar({ className }: SidebarProps) {
                 </p>
               </div>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="w-full justify-start"
-              onPress={() => {
+            <button
+              className="btn w-full justify-start"
+              onClick={() => {
                 // Handle logout
                 console.log("Logout clicked");
               }}
             >
               Log out
-            </Button>
+            </button>
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2">
-            <Avatar size="sm" className="bg-primary/10" />
-            <Button
-              isIconOnly
-              variant="ghost"
-              size="sm"
+      <div className="avatar">
+        <div className="w-24 rounded">
+          <img src="https://img.daisyui.com/images/profile/demo/batperson@192.webp" />
+        </div>
+      </div>
+            <button
               aria-label="Log out"
-              onPress={() => {
+              onClick={() => {
                 // Handle logout
                 console.log("Logout clicked");
               }}
             >
               <LogOut className="w-4 h-4" />
-            </Button>
+            </button>
           </div>
         )}
       </div>
