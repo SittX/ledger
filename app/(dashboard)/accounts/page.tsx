@@ -1,7 +1,4 @@
 import { DollarSign, Plus, Star } from "lucide-react";
-import { Button } from "@heroui/button";
-import { Card, CardFooter, CardHeader, CardBody } from "@heroui/card";
-import { Link } from "@heroui/link";
 
 export default function AccountPage() {
   const accounts = [
@@ -41,25 +38,25 @@ export default function AccountPage() {
           </p>
         </div>
         <div>
-          <Button as={Link} color="primary">
+          <button className="btn">
             Create new Account <Plus />
-          </Button>
+          </button>
         </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {accounts.map((account) => (
-          <Card key={account.id} className="min-w-60 max-w-100">
-            <CardHeader className="flex flex-row items-center justify-between">
+          <div key={account.id} className="card min-w-60 max-w-100">
+            <div className="card-title flex flex-row items-center justify-between">
               <div className="flex flex-col">
                 <DollarSign />
                 <p className="text-xl font-bold">{account.name}</p>
                 <p className="text-md">{account.type}</p>
               </div>
               <div>
-                <Button>
+                <button className="card">
                   <Star />
-                </Button>
+                </button>
               </div>
             </CardHeader>
             <CardBody>
