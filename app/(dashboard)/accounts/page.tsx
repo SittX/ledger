@@ -1,4 +1,5 @@
 import { DollarSign, Plus, Star } from "lucide-react";
+import Link from "next/link";
 
 export default function AccountPage() {
   const accounts = [
@@ -38,9 +39,12 @@ export default function AccountPage() {
           </p>
         </div>
         <div>
-          <button className="btn btn-primary">
-            Create new Account <Plus />
-          </button>
+          <Link href="/accounts/new">
+            <button className="btn btn-primary">
+              Create new Account <Plus />
+            </button>
+          </Link>
+          
         </div>
       </div>
 
@@ -64,10 +68,10 @@ export default function AccountPage() {
               </div>
             <div className="card-actions">
               <div className="flex gap-3">
-                <button className="btn btn-primary">
+                <button className="btn btn-soft btn-primary">
                   View Details
                 </button>
-                <button className="btn btn-secondary">
+                <button className="btn btn-soft btn-secondary">
                   Add Transaction
                 </button>
               </div>
