@@ -48,9 +48,9 @@ export default function AccountPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {accounts.map((account) => (
-          <div key={account.id} className="card card-border border-white min-w-60 max-w-100 p-3">
+          <div key={account.id} className="card card-border dark:border-white border-black min-w-60 max-w-100 p-3">
             <div className="card-title flex items-center justify-between">
               <div className="flex flex-col">
                 <DollarSign />
@@ -68,10 +68,10 @@ export default function AccountPage() {
               </div>
             <div className="card-actions">
               <div className="flex gap-3">
-                <button className="btn btn-soft btn-primary">
+                <button className="btn btn-primary">
                   View Details
                 </button>
-                <button className="btn btn-soft btn-secondary">
+                <button className="btn btn-secondary">
                   Add Transaction
                 </button>
               </div>
