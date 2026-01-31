@@ -1,7 +1,7 @@
 "use client";
 import { useState, useMemo } from "react";
 import Form from "next/form";
-import CurrencyPickerDialog from "@/ui/CurrencyPickerDialog";
+import CurrencyPickerDialog from "@/components/ui/CurrencyPickerDialog";
 import { createAccount } from "../_actions/action";
 import { getCurrency } from "@/lib/currencies";
 

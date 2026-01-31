@@ -20,7 +20,6 @@ interface SidebarProps {
 
 export default function Sidebar({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
-  const [isDarkMode, setIsDarkMode] = useState(false);
   const pathname = usePathname();
 
   const toggleSidebar = () => {
@@ -37,7 +36,7 @@ export default function Sidebar({ className }: SidebarProps) {
   return (
     <aside
       className={cn(
-        "flex flex-col h-screen bg-background border-r border-divider transition-all duration-300 ease-in-out",
+        "flex flex-col h-screen bg-background bg-base-300 shadow-sm border-divider transition-all duration-300 ease-in-out",
         isCollapsed ? "w-16" : "w-64",
         className,
       )}
@@ -182,7 +181,7 @@ export default function Sidebar({ className }: SidebarProps) {
               //   size="sm"
               //   aria-label="Toggle dark mode"
               // />
-              <button/>
+              <button />
             )}
           </div>
         </div>
@@ -214,11 +213,11 @@ export default function Sidebar({ className }: SidebarProps) {
           </div>
         ) : (
           <div className="flex flex-col items-center gap-2">
-      <div className="avatar">
-        <div className="w-24 rounded">
-          <img src="https://img.daisyui.com/images/profile/demo/batperson@192.webp" />
-        </div>
-      </div>
+            <div className="avatar">
+              <div className="w-24 rounded">
+                <img src="https://img.daisyui.com/images/profile/demo/batperson@192.webp" />
+              </div>
+            </div>
             <button
               aria-label="Log out"
               onClick={() => {
