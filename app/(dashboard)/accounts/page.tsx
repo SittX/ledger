@@ -1,34 +1,10 @@
+import { TAccount } from "@/schemas/account";
+import { getAllAccounts } from "@/services/account.service";
 import { DollarSign, Plus, Star } from "lucide-react";
 import Link from "next/link";
 
-export default function AccountPage() {
-  const accounts = [
-    {
-      id: 1,
-      type: "Checking",
-      name: "Checking Account",
-      balance: 2500,
-      isIncludeInNetWorth: true,
-      isPrimaryAcount: true,
-    },
-    {
-      id: 2,
-      type: "Saving",
-      name: "Savings Account",
-      balance: 10000,
-      isIncludedInNetWorth: true,
-      isPrimaryAccount: false,
-    },
-    {
-      id: 3,
-      type: "Credit Card",
-      name: "Credit Card",
-      balance: -500,
-      isIncludedInNetWorth: true,
-      isPrimaryAccount: false,
-    },
-  ];
-
+export default async function AccountPage() {
+  const accounts: TAccount[] = await getAllAccounts(1);
   return (
     <div>
       <div className="flex items-center justify-between mb-10">
@@ -56,8 +32,8 @@ export default function AccountPage() {
             <div className="card-title flex items-center justify-between">
               <div className="flex flex-col">
                 <DollarSign />
-                <p className="text-xl font-bold">{account.name}</p>
-                <p className="text-md">{account.type}</p>
+                <p className="text-xl font-bold">{account.title}</p>
+                <p className="text-md">{account.accountType}</p>
               </div>
               <div>
                 <button className="card">
@@ -70,7 +46,9 @@ export default function AccountPage() {
             </div>
             <div className="card-actions">
               <div className="flex gap-3">
-                <button className="btn">View Details</button>
+                <Link href={`/accounts/${account.id}`}>
+                  <button className="btn">View Details</button>
+                </Link>
                 <button className="btn btn-primary">Add Transaction</button>
               </div>
             </div>

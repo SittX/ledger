@@ -2,8 +2,9 @@
 import { useState, useMemo } from "react";
 import Form from "next/form";
 import CurrencyPickerDialog from "@/components/ui/CurrencyPickerDialog";
-import { createAccountAction } from "../_actions/action";
+import { updateAccountAction } from "../_actions/action";
 import { getCurrency } from "@/lib/currencies";
+import { TAccount } from "@/schemas/account";
 
 // is_primary_account boolean null default false,
 
@@ -11,17 +12,24 @@ import { getCurrency } from "@/lib/currencies";
 // icon character varying(10) null,
 // color character varying(10) null default '2fc2db'::character varying,
 
-export default function AccountCreateForm() {
+export default function AccountUpdateForm({ account }: { account: TAccount }) {
   return (
     <Form
-      action={createAccountAction}
+      action={updateAccountAction.bind(null, account.id)}
       className="min-w-lg max-w-xl mx-auto border border-ghost rounded-lg p-6 flex flex-col gap-4"
     >
       <input
         type="number"
-        defaultValue="1"
+        defaultValue={account.userId}
         name="userId"
         id="userId"
+        className="hidden"
+      />
+      <input
+        type="number"
+        defaultValue={account.id}
+        name="id"
+        id="id"
         className="hidden"
       />
       <div>
@@ -32,6 +40,7 @@ export default function AccountCreateForm() {
           type="text"
           id="title"
           name="title"
+          defaultValue={account.title}
           className="input w-full"
           required
         />
@@ -44,6 +53,7 @@ export default function AccountCreateForm() {
         <textarea
           id="description"
           name="description"
+          defaultValue={account.description ?? ""}
           className="textarea w-full"
         />
       </div>
@@ -57,6 +67,7 @@ export default function AccountCreateForm() {
           id="balance"
           name="balance"
           className="input w-full required number"
+          defaultValue={account.balance ?? 0}
           required
         />
       </div>
@@ -68,6 +79,7 @@ export default function AccountCreateForm() {
             name="includeInNetworth"
             type="checkbox"
             className="toggle toggle-sm checked:bg-primary checked:border-primary"
+            defaultChecked={account.includeInNetWorth ? true : false}
           />
           Include In Networth
         </label>
@@ -83,6 +95,7 @@ export default function AccountCreateForm() {
             name="primaryAccount"
             type="checkbox"
             className="toggle toggle-sm checked:bg-primary checked:border-primary"
+            defaultChecked={account.isPrimaryAccount ? true : false}
           />
           Primary Account
         </label>
@@ -98,6 +111,7 @@ export default function AccountCreateForm() {
             name="active"
             type="checkbox"
             className="toggle toggle-sm checked:bg-primary checked:border-primary"
+            defaultChecked={account.isActive ? true : false}
           />
           Is Active
         </label>
@@ -108,7 +122,7 @@ export default function AccountCreateForm() {
 
       <div>
         <select
-          defaultValue=""
+          defaultValue={account.accountType ?? ""}
           className="select"
           name="accountType"
           aria-label="Account type"
@@ -138,7 +152,7 @@ export default function AccountCreateForm() {
           Cancel
         </button>
         <button type="submit" className="btn btn-primary ml-2">
-          Create Account
+          Update Account
         </button>
       </div>
     </Form>
