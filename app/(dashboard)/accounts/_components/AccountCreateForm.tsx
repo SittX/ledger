@@ -4,6 +4,7 @@ import Form from "next/form";
 import CurrencyPickerDialog from "@/components/ui/CurrencyPickerDialog";
 import { createAccountAction } from "../_actions/action";
 import { getCurrency } from "@/lib/currencies";
+import { Save } from "lucide-react";
 
 // is_primary_account boolean null default false,
 
@@ -15,7 +16,7 @@ export default function AccountCreateForm() {
   return (
     <Form
       action={createAccountAction}
-      className="min-w-lg max-w-xl mx-auto border border-ghost rounded-lg p-6 flex flex-col gap-4"
+      className="space-y-6 max-w-lg border rounded-md p-6 xl:mx-auto"
     >
       <input
         type="number"
@@ -24,45 +25,42 @@ export default function AccountCreateForm() {
         id="userId"
         className="hidden"
       />
-      <div>
-        <label className="label mb-2 font-medium" htmlFor="title">
-          Account Name
-        </label>
+      <label className="floating-label">
+        <span>Account Name</span>
         <input
           type="text"
           id="title"
           name="title"
           className="input w-full"
+          placeholder="Account Name"
           required
         />
-      </div>
+      </label>
 
-      <div className="md:col-span-2">
-        <label className="label mb-2 font-medium" htmlFor="description">
-          Description
-        </label>
+      <label className="floating-label">
+        <span>Description</span>
         <textarea
           id="description"
           name="description"
           className="textarea w-full"
+          placeholder="Description"
         />
-      </div>
+      </label>
 
-      <div>
-        <label className="label mb-2 font-medium" htmlFor="balance">
-          Balance
-        </label>
+      <label className="floating-label">
+        <span>Balance</span>
         <input
           type="number"
           id="balance"
           name="balance"
           className="input w-full required number"
+          placeholder="Balance"
           required
         />
-      </div>
+      </label>
 
-      <div>
-        <label className="label mb-2 font-medium" htmlFor="includeInNetworth">
+      <div className="space-y-2">
+        <label className="label " htmlFor="includeInNetworth">
           <input
             id="includeInNetworth"
             name="includeInNetworth"
@@ -71,13 +69,13 @@ export default function AccountCreateForm() {
           />
           Include In Networth
         </label>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-base-content/50">
           Include this account in networth calculations
         </p>
       </div>
 
-      <div>
-        <label className="label mb-2 font-medium" htmlFor="primaryAccount">
+      <div className="space-y-2">
+        <label className="label " htmlFor="primaryAccount">
           <input
             id="primaryAccount"
             name="primaryAccount"
@@ -86,13 +84,13 @@ export default function AccountCreateForm() {
           />
           Primary Account
         </label>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-base-content/50">
           Set this account as the primary expense account
         </p>
       </div>
 
-      <div>
-        <label className="label mb-2 font-medium" htmlFor="active">
+      <div className="space-y-2">
+        <label className="label" htmlFor="active">
           <input
             id="active"
             name="active"
@@ -101,12 +99,12 @@ export default function AccountCreateForm() {
           />
           Is Active
         </label>
-        <p className="text-sm text-muted-foreground">
+        <p className="text-sm text-base-content/50">
           Toggle account visibility in the dashboard
         </p>
       </div>
 
-      <div>
+      <label className="floating-label">
         <select
           defaultValue=""
           className="select"
@@ -120,25 +118,26 @@ export default function AccountCreateForm() {
           <option value="saving">Savings</option>
           <option value="investment">Investment</option>
         </select>
-      </div>
+      </label>
 
-      <div>
-        <label className="label mb-2 font-medium" htmlFor="currencyCode">
+      <div className="space-y-2">
+        <label className="label " htmlFor="currencyCode">
           Currency
         </label>
         <CurrencyField />
       </div>
 
-      <div className="flex justify-end mt-4 md:col-span-2">
+      <div className="flex items-center justify-end mt-4 space-x-2">
         <button
           type="button"
-          className="btn btn-error text-white"
+          className="btn btn-ghost"
           onClick={() => window.history.back()}
         >
           Cancel
         </button>
-        <button type="submit" className="btn btn-primary ml-2">
-          Create Account
+        <button type="submit" className="btn btn-primary">
+          <Save size={18} />
+          Save
         </button>
       </div>
     </Form>
@@ -146,8 +145,7 @@ export default function AccountCreateForm() {
 }
 
 function CurrencyField() {
-  const [open, setOpen] = useState(false);
-  // keep an empty string as the controlled value (simpler to serialize)
+  const [open, setOpen] = useState<boolean>(false);
   const [currency, setCurrency] = useState<string>("");
 
   // memoize lookup to avoid recalculating on every render
@@ -171,14 +169,14 @@ function CurrencyField() {
           <span>
             {selected ? (
               <span className="flex items-center gap-2">
-                <span className="text-sm">{selected.symbol}</span>
-                <span className="font-medium">{selected.code}</span>
-                <span className="text-sm text-muted-foreground">
+                <span className="text-base">{selected.symbol}</span>
+                <span className="">{selected.code}</span>
+                <span className="text-sm text-base-content/50">
                   — {selected.shortName ?? selected.name}
                 </span>
               </span>
             ) : (
-              <span className="text-muted-foreground">Pick a currency</span>
+              <span className="text-base-content/50">Pick a currency</span>
             )}
           </span>
           <span className="opacity-70">▾</span>

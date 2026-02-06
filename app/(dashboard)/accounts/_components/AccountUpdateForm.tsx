@@ -16,7 +16,7 @@ export default function AccountUpdateForm({ account }: { account: TAccount }) {
   return (
     <Form
       action={updateAccountAction.bind(null, account.id)}
-      className="min-w-lg max-w-xl mx-auto border border-ghost rounded-lg p-6 flex flex-col gap-4"
+      className="min-w-lg max-w-xl mx-auto border border-ghost rounded-md p-6 flex flex-col gap-4"
     >
       <input
         type="number"
@@ -46,7 +46,7 @@ export default function AccountUpdateForm({ account }: { account: TAccount }) {
         />
       </div>
 
-      <div className="md:col-span-2">
+      <div>
         <label className="label mb-2 font-medium" htmlFor="description">
           Description
         </label>
@@ -143,7 +143,7 @@ export default function AccountUpdateForm({ account }: { account: TAccount }) {
         <CurrencyField />
       </div>
 
-      <div className="flex justify-end mt-4 md:col-span-2">
+      <div className="flex items-center justify-end mt-4 space-x-2">
         <button
           type="button"
           className="btn btn-error text-white"
@@ -151,7 +151,7 @@ export default function AccountUpdateForm({ account }: { account: TAccount }) {
         >
           Cancel
         </button>
-        <button type="submit" className="btn btn-primary ml-2">
+        <button type="submit" className="btn btn-primary">
           Update Account
         </button>
       </div>
@@ -185,7 +185,7 @@ function CurrencyField() {
           <span>
             {selected ? (
               <span className="flex items-center gap-2">
-                <span className="text-sm">{selected.symbol}</span>
+                <span className="text-base">{selected.symbol}</span>
                 <span className="font-medium">{selected.code}</span>
                 <span className="text-sm text-muted-foreground">
                   — {selected.shortName ?? selected.name}
