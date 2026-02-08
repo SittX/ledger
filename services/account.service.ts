@@ -1,6 +1,6 @@
 import { db } from "@/database";
 import { account } from "@/database/schema";
-import { TAccount, TAccountInsert } from '@/schemas/account';
+import { TAccount, TAccountInsert } from '@/types/account';
 import { eq } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 

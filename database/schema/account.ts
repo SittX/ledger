@@ -10,6 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { currency } from "./curency";
 import { profile } from "./profile";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const accountTypes = pgEnum("account_types", [
     "current",
@@ -35,3 +36,6 @@ export const account = pgTable("accounts", {
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date()),
 });
+
+export const AccountCreateSchema = createInsertSchema(account);
+export const AccountSelectSchema = createSelectSchema(account);

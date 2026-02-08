@@ -1,4 +1,4 @@
-import { TAccount } from "@/schemas/account";
+import { TAccount } from "@/types/account";
 import { getAllAccounts } from "@/services/account.service";
 import { DollarSign, Plus, Star } from "lucide-react";
 import Link from "next/link";
@@ -15,8 +15,8 @@ export default async function AccountPage() {
           </p>
         </div>
         <Link href="/accounts/new" className="link">
-          <button className="btn btn-md btn-primary">
-            <Plus />
+          <button className="btn btn-primary">
+            <Plus size={16} />
             Create New Account
           </button>
         </Link>
@@ -25,28 +25,30 @@ export default async function AccountPage() {
       <div className="flex flex-wrap gap-4">
         {accounts.map((account) => (
           <div key={account.id} className="card card-border bg-base-300 w-80">
-            <div className="card-body p-4 space-y-6">
+            <div className="card-body p-4 space-y-4">
               <div className="card-title flex items-start justify-between">
-                <div className="space-y-2">
-                  <p className="text-lg font-semibold">{account.title}</p>
-                  <p className="text-base text-base-content/50 font-medium">
-                    {account.accountType?.toLocaleUpperCase()}
+                <div>
+                  <p className="text-lg">{account.title}</p>
+                  <p className="text-md md:text-sm text-base-content/50">
+                    {account.accountType}
                   </p>
                 </div>
                 <button className="btn btn-circle">
-                  <Star />
+                  <Star size={18} />
                 </button>
               </div>
 
-              <p className="text-2xl font-bold">{account.balance}</p>
+              <div>
+                <p className="text-xl font-bold">{account.balance}</p>
+                <p className="text-md md:text-sm text-base-content/50">MMK</p>
+              </div>
 
-              <div className="card-actions">
-                <div className="flex items-center space-x-2">
-                  <button className="btn">Add Transaction</button>
-                  <Link href={`/accounts/${account.id}`}>
-                    <button className="btn btn-primary">View Details</button>
-                  </Link>
-                </div>
+              <div className="card-actions justify-end">
+                <Link href={`/accounts/${account.id}`}>
+                  <button className="btn btn-soft btn-primary">
+                    View Details
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import AccountCreateForm from "../_components/AccountCreateForm";
+import AccountForm from "../_components/AccountForm";
 
 export default function AccountCreatePage() {
   return (
@@ -9,7 +9,7 @@ export default function AccountCreatePage() {
           Fill in the details below to create a new account.
         </p>
       </div>
-      <AccountCreateForm />
+      <AccountForm />
     </div>
   );
 }

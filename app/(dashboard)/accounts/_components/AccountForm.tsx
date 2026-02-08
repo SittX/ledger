@@ -1,33 +1,59 @@
 "use client";
-import { useState, useMemo } from "react";
+
+import { useRef } from "react";
 import Form from "next/form";
-import CurrencyPickerDialog from "@/components/ui/CurrencyPickerDialog";
-import { createAccountAction } from "../_actions/action";
-import { getCurrency } from "@/lib/currencies";
+import { accountUpsertAction } from "../_actions/action";
+import { TAccountInsert } from "../../../../types/account";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { AccountCreateSchema } from "../../../../database/schema/account";
 import { Save } from "lucide-react";
 
-// is_primary_account boolean null default false,
+export default function AccountForm(params: { data?: TAccountInsert }) {
+  const data = params.data;
 
-// currency_code_id integer null,
-// icon character varying(10) null,
-// color character varying(10) null default '2fc2db'::character varying,
+  const formRef = useRef<HTMLFormElement | null>(null);
 
-export default function AccountCreateForm() {
+  const defaultValues: Partial<TAccountInsert> = {
+    title: data?.title ?? "",
+    description: data?.description ?? null,
+    balance: data?.balance != null ? String(data.balance) : null,
+    includeInNetWorth: data?.includeInNetWorth ?? false,
+    isPrimaryAccount: data?.isPrimaryAccount ?? false,
+    isActive: data?.isActive ?? false,
+    accountType:
+      (data?.accountType as "current" | "saving" | "investment") ?? "current",
+    currencyCodeId: data?.currencyCodeId ?? 1,
+    userId: data?.userId ?? 1,
+    id: data?.id ?? undefined,
+  };
+
+  const {
+    register,
+    trigger,
+    formState: { errors },
+  } = useForm<TAccountInsert>({
+    resolver: zodResolver(AccountCreateSchema),
+    defaultValues,
+  });
+
   return (
     <Form
-      action={createAccountAction}
+      ref={formRef}
+      action={accountUpsertAction}
       className="space-y-6 max-w-lg border rounded-md p-6 xl:mx-auto"
     >
+      <input type="hidden" name="userId" id="userId" defaultValue="1" />
       <input
-        type="number"
-        defaultValue="1"
-        name="userId"
-        id="userId"
-        className="hidden"
+        type="hidden"
+        name="id"
+        id="id"
+        defaultValue={data?.id ? String(data.id) : ""}
       />
       <label className="floating-label">
         <span>Account Name</span>
         <input
+          {...register("title")}
           type="text"
           id="title"
           name="title"
@@ -40,6 +66,7 @@ export default function AccountCreateForm() {
       <label className="floating-label">
         <span>Description</span>
         <textarea
+          {...register("description")}
           id="description"
           name="description"
           className="textarea w-full"
@@ -50,6 +77,7 @@ export default function AccountCreateForm() {
       <label className="floating-label">
         <span>Balance</span>
         <input
+          {...register("balance")}
           type="number"
           id="balance"
           name="balance"
@@ -62,8 +90,9 @@ export default function AccountCreateForm() {
       <div className="space-y-2">
         <label className="label " htmlFor="includeInNetworth">
           <input
-            id="includeInNetworth"
-            name="includeInNetworth"
+            {...register("includeInNetWorth")}
+            id="includeInNetWorth"
+            name="includeInNetWorth"
             type="checkbox"
             className="toggle toggle-sm checked:bg-primary checked:border-primary"
           />
@@ -77,8 +106,9 @@ export default function AccountCreateForm() {
       <div className="space-y-2">
         <label className="label " htmlFor="primaryAccount">
           <input
-            id="primaryAccount"
-            name="primaryAccount"
+            {...register("isPrimaryAccount")}
+            id="isPrimaryAccount"
+            name="isPrimaryAccount"
             type="checkbox"
             className="toggle toggle-sm checked:bg-primary checked:border-primary"
           />
@@ -92,8 +122,9 @@ export default function AccountCreateForm() {
       <div className="space-y-2">
         <label className="label" htmlFor="active">
           <input
-            id="active"
-            name="active"
+            {...register("isActive")}
+            id="isActive"
+            name="isActive"
             type="checkbox"
             className="toggle toggle-sm checked:bg-primary checked:border-primary"
           />
@@ -106,7 +137,7 @@ export default function AccountCreateForm() {
 
       <label className="floating-label">
         <select
-          defaultValue=""
+          {...register("accountType")}
           className="select"
           name="accountType"
           aria-label="Account type"
@@ -121,10 +152,22 @@ export default function AccountCreateForm() {
       </label>
 
       <div className="space-y-2">
-        <label className="label " htmlFor="currencyCode">
+        <label className="label " htmlFor="currencyCodeId">
           Currency
         </label>
-        <CurrencyField />
+        <select
+          {...register("currencyCodeId")}
+          className="select"
+          name="currencyCodeId"
+          aria-label="Currency"
+        >
+          <option value="" disabled>
+            Pick an account type
+          </option>
+          <option value="1">MMK</option>
+          <option value="2">USD</option>
+          <option value="3">BHAT</option>
+        </select>
       </div>
 
       <div className="flex items-center justify-end mt-4 space-x-2">
@@ -135,60 +178,19 @@ export default function AccountCreateForm() {
         >
           Cancel
         </button>
-        <button type="submit" className="btn btn-primary">
+        <button
+          type="submit"
+          className="btn btn-primary"
+          onClick={async (e) => {
+            e.preventDefault();
+            const ok = await trigger();
+            if (ok) formRef.current?.requestSubmit();
+          }}
+        >
           <Save size={18} />
           Save
         </button>
       </div>
     </Form>
-  );
-}
-
-function CurrencyField() {
-  const [open, setOpen] = useState<boolean>(false);
-  const [currency, setCurrency] = useState<string>("");
-
-  // memoize lookup to avoid recalculating on every render
-  const selected = useMemo(
-    () => (currency ? getCurrency(currency) : undefined),
-    [currency],
-  );
-
-  return (
-    <>
-      <input type="hidden" name="currencyCode" value={currency} />
-
-      <div className="flex items-center gap-2">
-        <button
-          type="button"
-          className="btn btn-outline flex-1 justify-between text-left"
-          onClick={() => setOpen(true)}
-          aria-haspopup="dialog"
-          aria-expanded={open}
-        >
-          <span>
-            {selected ? (
-              <span className="flex items-center gap-2">
-                <span className="text-base">{selected.symbol}</span>
-                <span className="">{selected.code}</span>
-                <span className="text-sm text-base-content/50">
-                  — {selected.shortName ?? selected.name}
-                </span>
-              </span>
-            ) : (
-              <span className="text-base-content/50">Pick a currency</span>
-            )}
-          </span>
-          <span className="opacity-70">▾</span>
-        </button>
-      </div>
-
-      <CurrencyPickerDialog
-        open={open}
-        onOpenChange={setOpen}
-        value={currency}
-        onSelect={(code) => setCurrency(code ?? "")}
-      />
-    </>
   );
 }

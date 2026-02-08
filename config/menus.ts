@@ -19,7 +19,7 @@ export const menuSections: MenuSection[] = [
             {
                 name: "Home", href: "/", icon: Home, order: 1
             },
-            { name: "History", href: "/transactions", icon: ChartColumn, order: 2 },
+            { name: "Transactions", href: "/transactions", icon: ChartColumn, order: 2 },
         ],
     },
     {
