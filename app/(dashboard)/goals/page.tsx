@@ -3,18 +3,26 @@ import Link from "next/link";
 
 export default function GoalPage() {
   return (
-    <div>
-      <div className="flex items-center justify-between mb-10">
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold">Goals</h1>
-          <p className="text-lg text-muted-foreground">Manage all goals</p>
+          <h1 className="text-lg font-semibold">Goals</h1>
+          <p className="text-lg text-base-content/50">Manage all your goals</p>
         </div>
-        <div>
-          <Link href="/accounts/new">
-            <button className="btn btn-md btn-primary">
-              Create New Goal <Plus />
-            </button>
-          </Link>
+        <Link href="/goals/new">
+          <button className="btn btn-primary">
+            <Plus /> Create New Goal
+          </button>
+        </Link>
+      </div>
+
+      {/* Body */}
+      <div className="flex flex-wrap">
+        <div className="card bg-base-300">
+          <div className="card-body">
+            <p className="text-lg">Coming Soon!</p>
+          </div>
         </div>
       </div>
     </div>

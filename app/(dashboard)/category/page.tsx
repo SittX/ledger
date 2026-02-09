@@ -11,7 +11,7 @@ export default function CategoryPage() {
           <p className="text-lg text-base-content/50">Manage all categories</p>
         </div>
         <div>
-          <Link href="/accounts/new">
+          <Link href="/category/new">
             <button className="btn btn-primary">
               <Plus size={16} />
               Create New Category

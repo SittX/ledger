@@ -23,7 +23,7 @@ export default function SubscriptionPage() {
       <div className="flex flex-wrap">
         <div className="card bg-base-300">
           <div className="card-body">
-            <p className="text-lg">Subscription</p>
+            <p className="text-lg">Coming Soon!</p>
           </div>
         </div>
       </div>

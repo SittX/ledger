@@ -1,5 +1,6 @@
 import { getAccountById } from "@/services/account.service";
-import AccountForm from "../_components/AccountForm";
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 
 // TODO: need to update the UI for this.
 export default async function AccountEditPage({
@@ -10,9 +11,135 @@ export default async function AccountEditPage({
   const { id } = await params;
   const accountData = await getAccountById(Number(id));
 
-  if (!accountData) {
-    return <div>Account not found.</div>;
-  }
+  const rows = [
+    {
+      date: "Feb 1, 2026",
+      description: "Mobile Bills",
+      category: "Subscriptions",
+      amount: "- 10,000 MMK",
+      amountClass: "text-error",
+      rowClass: "hover:bg-base-300 hover:cursor-pointer",
+    },
+    {
+      date: "Feb 14, 2026",
+      description: "Dinner at M Tower",
+      category: "Foods",
+      amount: "- 80,000 MMK",
+      amountClass: "text-error",
+      rowClass: "hover:bg-base-300 hover:cursor-pointer",
+    },
+    {
+      date: "Feb 28, 2026",
+      description: "Monthly salary",
+      category: "Salary",
+      amount: "+ 800,000 MMK",
+      amountClass: "text-success",
+      rowClass: "hover:bg-base-300 hover:cursor-pointer",
+    },
+  ];
 
-  return <AccountForm data={accountData} />;
+  // if (!accountData) {
+  //   return <div>Account not found.</div>;
+  // }
+
+  // return <AccountForm data={accountData} />;
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h1 className="text-xl font-bold">Account Details</h1>
+        <Link href={`/accounts/${id}/edit`}>
+          <button className="btn btn-primary">Edit</button>
+        </Link>
+      </div>
+
+      <div className="card bg-base-300">
+        <div className="card-body gap-6">
+          <div className="card-title">
+            <p className="text-xl font-semibold">Information</p>
+            {accountData?.isPrimaryAccount && (
+              <span className="badge badge-outline badge-info">
+                Primary Account
+              </span>
+            )}
+          </div>
+          <div className=" grid grid-cols-1 lg:grid-cols-2 gap-y-6">
+            <div>
+              <h3 className="text-md text-base-content/50">Name</h3>
+              <p className="text-lg font-semibold">{accountData?.title}</p>
+            </div>
+            <div>
+              <h3 className="text-md text-base-content/50">Description</h3>
+              <p className="text-lg font-semibold">
+                {accountData?.description}
+              </p>
+            </div>
+            <div className="col-span-2">
+              <h3 className="text-md text-base-content/50">Balance</h3>
+              <p className="text-lg font-semibold">{accountData?.balance}</p>
+            </div>
+            <div>
+              <h3 className="text-md text-base-content/50">
+                Include In NetWorth
+              </h3>
+              <p className="text-lg font-semibold">
+                {accountData?.includeInNetWorth ? "true" : "false"}
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-md text-base-content/50">Account Type</h3>
+              <p className="text-lg font-semibold">
+                {accountData?.accountType}
+              </p>
+            </div>
+
+            <div>
+              <h3 className="text-md text-base-content/50">Status</h3>
+              {accountData?.isActive && (
+                <span className={`badge badge-success `}>Active</span>
+              )}
+              {!accountData?.isActive && (
+                <span className={`badge badge-disabled`}>Not Active</span>
+              )}
+            </div>
+          </div>
+          {/* TODO:Icon Picker and Color Picker will goes here */}
+        </div>
+      </div>
+
+      <div>
+        <Link href={"/accounts"}>
+          <button className="btn btn-primary">
+            <ArrowLeft size={16} />
+            Back to Accounts
+          </button>
+        </Link>
+      </div>
+
+      {/* TODO: Weekly or Monthly Transactions related to this accounts will be shown here */}
+      <div className="overflow-x-auto">
+        <table className="table table-pin-cols">
+          {/* head */}
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th>Category</th>
+              <th>Amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((r, i) => (
+              <tr key={i} className={r.rowClass}>
+                <td>{r.date}</td>
+                <td>{r.description}</td>
+                <td>{r.category}</td>
+                <td className={r.amountClass}>{r.amount}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
 }
