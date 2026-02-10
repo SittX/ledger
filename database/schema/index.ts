@@ -1,8 +1,4 @@
-// Schema
-export { appSchema } from "./schema";
-
 // Core tables
-export { profile } from "./profile";
 export { currency } from "./curency";
 export { category } from "./category";
 export { userCategory } from "./user-category";

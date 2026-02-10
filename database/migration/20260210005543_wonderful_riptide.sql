@@ -4,17 +4,19 @@ CREATE TYPE "public"."recurring_frequency" AS ENUM('daily', 'weekly', 'monthly',
 CREATE TYPE "public"."subscription_type" AS ENUM('monthly', 'yearly', 'quarterly');--> statement-breakpoint
 CREATE TABLE "accounts" (
 	"id" serial PRIMARY KEY NOT NULL,
+	"title" varchar(255) NOT NULL,
+	"description" varchar(500),
 	"account_type" "account_types" DEFAULT 'current',
 	"balance" numeric(12, 2),
 	"is_primary_account" boolean DEFAULT false,
 	"currency_code_id" integer,
 	"icon" varchar(10),
 	"color" varchar(10) DEFAULT '2fc2db',
-	"user_id" integer NOT NULL,
+	"user_id" uuid NOT NULL,
 	"include_in_net_worth" boolean DEFAULT true,
 	"is_active" boolean DEFAULT false,
-	"created_by" integer,
-	"updated_by" integer,
+	"created_by" uuid,
+	"updated_by" uuid,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp
 );
@@ -46,7 +48,7 @@ CREATE TABLE "budgets" (
 	"spent_at_last_update" timestamp,
 	"icon" varchar(10),
 	"color" varchar(10) DEFAULT '2fc2db',
-	"user_id" integer NOT NULL,
+	"user_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp
 );
@@ -58,7 +60,8 @@ CREATE TABLE "categories" (
 	"category_type" varchar(30),
 	"icon" varchar(10),
 	"color" varchar(10) DEFAULT '2fc2db',
-	"parent_id" integer
+	"parent_id" integer,
+	"user_id" uuid
 );
 --> statement-breakpoint
 CREATE TABLE "currency" (
@@ -81,7 +84,7 @@ CREATE TABLE "goals" (
 	"category_id" integer,
 	"icon" varchar(10),
 	"color" varchar(10) DEFAULT '2fc2db',
-	"user_id" integer NOT NULL,
+	"user_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp
 );
@@ -93,17 +96,7 @@ CREATE TABLE "payees" (
 	"website" varchar(255),
 	"notes" varchar(500),
 	"is_favorite" boolean DEFAULT false,
-	"user_id" integer NOT NULL,
-	"created_at" timestamp DEFAULT now(),
-	"updated_at" timestamp
-);
---> statement-breakpoint
-CREATE TABLE "profiles" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"user_id" uuid,
-	"full_name" varchar(255),
-	"avatar_url" text,
-	"timezone" varchar(50),
+	"user_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp
 );
@@ -116,7 +109,7 @@ CREATE TABLE "subscriptions" (
 	"subscription_type" "subscription_type",
 	"recurring_days" integer,
 	"due_date" date,
-	"user_id" integer NOT NULL,
+	"user_id" uuid NOT NULL,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp
 );
@@ -133,13 +126,13 @@ CREATE TABLE "transactions" (
 	"amount" numeric(12, 2) NOT NULL,
 	"transaction_date" timestamp,
 	"attachment_id" integer,
-	"user_id" integer NOT NULL,
+	"user_id" uuid NOT NULL,
 	"payee_id" integer,
 	"status" varchar(20),
 	"is_deleted" boolean DEFAULT false,
 	"reconciliation_date" timestamp,
-	"created_by" integer,
-	"updated_by" integer,
+	"created_by" uuid,
+	"updated_by" uuid,
 	"created_at" timestamp DEFAULT now(),
 	"updated_at" timestamp
 );
@@ -161,29 +154,29 @@ CREATE TABLE "user_categories" (
 	"category_type" varchar(30),
 	"icon" varchar(10),
 	"color" varchar(10) DEFAULT '2fc2db',
-	"parent_id" integer,
-	"user_id" integer NOT NULL
+	"parent_category_id" integer,
+	"user_id" uuid NOT NULL
 );
 --> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_currency_code_id_currency_id_fk" FOREIGN KEY ("currency_code_id") REFERENCES "public"."currency"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_profiles_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "accounts" ADD CONSTRAINT "accounts_created_by_profiles_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "accounts" ADD CONSTRAINT "accounts_updated_by_profiles_id_fk" FOREIGN KEY ("updated_by") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "accounts" ADD CONSTRAINT "accounts_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "accounts" ADD CONSTRAINT "accounts_created_by_user_id_fk" FOREIGN KEY ("created_by") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "accounts" ADD CONSTRAINT "accounts_updated_by_user_id_fk" FOREIGN KEY ("updated_by") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "budgets" ADD CONSTRAINT "budgets_category_id_categories_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."categories"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "budgets" ADD CONSTRAINT "budgets_user_id_profiles_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "budgets" ADD CONSTRAINT "budgets_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "categories" ADD CONSTRAINT "categories_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "categories" ADD CONSTRAINT "category_parent_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."categories"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "goals" ADD CONSTRAINT "goals_category_id_categories_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."categories"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "goals" ADD CONSTRAINT "goals_user_id_profiles_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "payees" ADD CONSTRAINT "payees_user_id_profiles_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "profiles" ADD CONSTRAINT "profiles_user_id_users_id_fk" FOREIGN KEY ("user_id") REFERENCES "auth"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "goals" ADD CONSTRAINT "goals_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "payees" ADD CONSTRAINT "payees_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "subscriptions" ADD CONSTRAINT "subscriptions_category_id_categories_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."categories"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "subscriptions" ADD CONSTRAINT "subscriptions_user_id_profiles_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "subscriptions" ADD CONSTRAINT "subscriptions_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "transactions" ADD CONSTRAINT "transactions_category_id_categories_id_fk" FOREIGN KEY ("category_id") REFERENCES "public"."categories"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "transactions" ADD CONSTRAINT "transactions_account_id_accounts_id_fk" FOREIGN KEY ("account_id") REFERENCES "public"."accounts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "transactions" ADD CONSTRAINT "transactions_user_id_profiles_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "transactions" ADD CONSTRAINT "transactions_created_by_profiles_id_fk" FOREIGN KEY ("created_by") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "transactions" ADD CONSTRAINT "transactions_updated_by_profiles_id_fk" FOREIGN KEY ("updated_by") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "transactions" ADD CONSTRAINT "transactions_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "transactions" ADD CONSTRAINT "transactions_created_by_user_id_fk" FOREIGN KEY ("created_by") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "transactions" ADD CONSTRAINT "transactions_updated_by_user_id_fk" FOREIGN KEY ("updated_by") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "transfers" ADD CONSTRAINT "transfers_from_account_id_accounts_id_fk" FOREIGN KEY ("from_account_id") REFERENCES "public"."accounts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "transfers" ADD CONSTRAINT "transfers_to_account_id_accounts_id_fk" FOREIGN KEY ("to_account_id") REFERENCES "public"."accounts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "user_categories" ADD CONSTRAINT "user_categories_user_id_profiles_id_fk" FOREIGN KEY ("user_id") REFERENCES "public"."profiles"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "user_categories" ADD CONSTRAINT "user_category_parent_id_fk" FOREIGN KEY ("parent_id") REFERENCES "public"."user_categories"("id") ON DELETE no action ON UPDATE no action;
+ALTER TABLE "user_categories" ADD CONSTRAINT "user_categories_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "user_categories" ADD CONSTRAINT "user_category_parent_id_fk" FOREIGN KEY ("parent_category_id") REFERENCES "public"."user_categories"("id") ON DELETE no action ON UPDATE no action;

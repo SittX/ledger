@@ -35,11 +35,6 @@ config({ path: resolve(rootDir, ".env.local") });
 export const env = {
     // Database
     DATABASE_URL: process.env.DATABASE_URL!,
-
-    // Supabase
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY: process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY!,
-
     // Node Environment
     NODE_ENV: nodeEnv,
 } as const;
@@ -47,8 +42,6 @@ export const env = {
 // Validate required environment variables
 const requiredEnvVars = [
     "DATABASE_URL",
-    "NEXT_PUBLIC_SUPABASE_URL",
-    "NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY",
 ] as const;
 
 for (const varName of requiredEnvVars) {

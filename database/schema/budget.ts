@@ -7,11 +7,11 @@ import {
     pgTable,
     serial,
     timestamp,
+    uuid,
     varchar,
 } from "drizzle-orm/pg-core";
-import { appSchema } from "./schema";
 import { category } from "./category";
-import { profile } from "./profile";
+import { user } from "./user";
 
 export const recurringFrequency = pgEnum("recurring_frequency", [
     "daily",
@@ -37,7 +37,7 @@ export const budget = pgTable("budgets", {
     spentAtLastUpdate: timestamp("spent_at_last_update"),
     icon: varchar("icon", { length: 10 }),
     color: varchar("color", { length: 10 }).default("2fc2db"),
-    userId: integer("user_id").references(() => profile.id).notNull(),
+    userId: uuid("user_id").references(() => user.id).notNull(),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date()),
 });

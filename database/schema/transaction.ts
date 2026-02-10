@@ -5,12 +5,12 @@ import {
     pgTable,
     serial,
     timestamp,
+    uuid,
     varchar,
 } from "drizzle-orm/pg-core";
-import { appSchema } from "./schema";
 import { category } from "./category";
 import { account } from "./account";
-import { profile } from "./profile";
+import { user } from "./user";
 
 // Forward references - these will be imported when needed
 // goal, subscription, attachment, payee tables
@@ -27,13 +27,13 @@ export const transaction = pgTable("transactions", {
     amount: numeric({ precision: 12, scale: 2 }).notNull(),
     transactionDate: timestamp("transaction_date"),
     attachmentId: integer("attachment_id"),
-    userId: integer("user_id").references(() => profile.id).notNull(),
+    userId: uuid("user_id").references(() => user.id).notNull(),
     payeeId: integer("payee_id"),
     status: varchar({ length: 20 }),
     isDeleted: boolean("is_deleted").default(false),
     reconciliationDate: timestamp("reconciliation_date"),
-    createdBy: integer("created_by").references(() => profile.id),
-    updatedBy: integer("updated_by").references(() => profile.id),
+    createdBy: uuid("created_by").references(() => user.id),
+    updatedBy: uuid("updated_by").references(() => user.id),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date()),
 });

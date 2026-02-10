@@ -5,7 +5,6 @@ import {
     serial,
     timestamp,
 } from "drizzle-orm/pg-core";
-import { appSchema } from "./schema";
 import { account } from "./account";
 
 export const transfer = pgTable("transfers", {

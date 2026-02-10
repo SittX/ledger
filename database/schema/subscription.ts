@@ -5,11 +5,11 @@ import {
     pgTable,
     serial,
     timestamp,
+    uuid,
     varchar,
 } from "drizzle-orm/pg-core";
-import { appSchema } from "./schema";
 import { category } from "./category";
-import { profile } from "./profile";
+import { user } from "./user";
 
 export const subscriptionType = pgEnum("subscription_type", [
     "monthly",
@@ -25,7 +25,7 @@ export const subscription = pgTable("subscriptions", {
     subscriptionType: subscriptionType("subscription_type"),
     recurringDays: integer("recurring_days"),
     dueDate: date("due_date"),
-    userId: integer("user_id").references(() => profile.id).notNull(),
+    userId: uuid("user_id").references(() => user.id).notNull(),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date()),
 });

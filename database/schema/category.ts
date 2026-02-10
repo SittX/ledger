@@ -1,5 +1,5 @@
-import { foreignKey, integer, pgTable, serial, varchar } from "drizzle-orm/pg-core";
-import { appSchema } from "./schema";
+import { foreignKey, integer, pgTable, serial, uuid, varchar } from "drizzle-orm/pg-core";
+import { user } from "./user";
 
 // System/base categories - no user_id, these are application-provided defaults
 export const category = pgTable("categories", {
@@ -10,6 +10,7 @@ export const category = pgTable("categories", {
     icon: varchar({ length: 10 }),
     color: varchar({ length: 10 }).default("2fc2db"),
     parentId: integer("parent_id"),
+    userId: uuid("user_id").references(() => user.id)
 },
     (table) => [
         foreignKey({

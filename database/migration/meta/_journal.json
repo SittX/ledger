@@ -4,16 +4,9 @@
   "entries": [
     {
       "idx": 0,
-      "version": "1",
-      "when": 1769041883471,
-      "tag": "20260122003123_busy_swarm",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "1",
-      "when": 1769472848037,
-      "tag": "20260127001408_abnormal_whirlwind",
+      "version": "7",
+      "when": 1770684943809,
+      "tag": "20260210005543_wonderful_riptide",
       "breakpoints": true
     }
   ]

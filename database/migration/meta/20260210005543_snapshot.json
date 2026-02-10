@@ -1,6 +1,6 @@
 {
-  "id": "606f8744-ba2d-4b4b-a24b-33bbe432ac34",
-  "prevId": "6cba1dbb-b839-4461-9a2e-9958e11ec88e",
+  "id": "86a4f0bc-a482-4201-a52c-a93710a76b24",
+  "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -13,6 +13,18 @@
           "type": "serial",
           "primaryKey": true,
           "notNull": true
+        },
+        "title": {
+          "name": "title",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "description": {
+          "name": "description",
+          "type": "varchar(500)",
+          "primaryKey": false,
+          "notNull": false
         },
         "account_type": {
           "name": "account_type",
@@ -56,7 +68,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -76,13 +88,13 @@
         },
         "created_by": {
           "name": "created_by",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
         "updated_by": {
           "name": "updated_by",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
@@ -115,10 +127,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "accounts_user_id_profiles_id_fk": {
-          "name": "accounts_user_id_profiles_id_fk",
+        "accounts_user_id_user_id_fk": {
+          "name": "accounts_user_id_user_id_fk",
           "tableFrom": "accounts",
-          "tableTo": "profiles",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -128,10 +141,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "accounts_created_by_profiles_id_fk": {
-          "name": "accounts_created_by_profiles_id_fk",
+        "accounts_created_by_user_id_fk": {
+          "name": "accounts_created_by_user_id_fk",
           "tableFrom": "accounts",
-          "tableTo": "profiles",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
           "columnsFrom": [
             "created_by"
           ],
@@ -141,10 +155,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "accounts_updated_by_profiles_id_fk": {
-          "name": "accounts_updated_by_profiles_id_fk",
+        "accounts_updated_by_user_id_fk": {
+          "name": "accounts_updated_by_user_id_fk",
           "tableFrom": "accounts",
-          "tableTo": "profiles",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
           "columnsFrom": [
             "updated_by"
           ],
@@ -326,7 +341,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -359,10 +374,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "budgets_user_id_profiles_id_fk": {
-          "name": "budgets_user_id_profiles_id_fk",
+        "budgets_user_id_user_id_fk": {
+          "name": "budgets_user_id_user_id_fk",
           "tableFrom": "budgets",
-          "tableTo": "profiles",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -425,10 +441,30 @@
           "type": "integer",
           "primaryKey": false,
           "notNull": false
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {},
       "foreignKeys": {
+        "categories_user_id_user_id_fk": {
+          "name": "categories_user_id_user_id_fk",
+          "tableFrom": "categories",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
+          "columnsFrom": [
+            "user_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
         "category_parent_id_fk": {
           "name": "category_parent_id_fk",
           "tableFrom": "categories",
@@ -570,7 +606,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -603,10 +639,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "goals_user_id_profiles_id_fk": {
-          "name": "goals_user_id_profiles_id_fk",
+        "goals_user_id_user_id_fk": {
+          "name": "goals_user_id_user_id_fk",
           "tableFrom": "goals",
-          "tableTo": "profiles",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -666,79 +703,9 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
-          "primaryKey": false,
-          "notNull": true
-        },
-        "created_at": {
-          "name": "created_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false,
-          "default": "now()"
-        },
-        "updated_at": {
-          "name": "updated_at",
-          "type": "timestamp",
-          "primaryKey": false,
-          "notNull": false
-        }
-      },
-      "indexes": {},
-      "foreignKeys": {
-        "payees_user_id_profiles_id_fk": {
-          "name": "payees_user_id_profiles_id_fk",
-          "tableFrom": "payees",
-          "tableTo": "profiles",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
-        }
-      },
-      "compositePrimaryKeys": {},
-      "uniqueConstraints": {},
-      "policies": {},
-      "checkConstraints": {},
-      "isRLSEnabled": false
-    },
-    "public.profiles": {
-      "name": "profiles",
-      "schema": "",
-      "columns": {
-        "id": {
-          "name": "id",
-          "type": "serial",
-          "primaryKey": true,
-          "notNull": true
-        },
-        "user_id": {
-          "name": "user_id",
           "type": "uuid",
           "primaryKey": false,
-          "notNull": false
-        },
-        "full_name": {
-          "name": "full_name",
-          "type": "varchar(255)",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "avatar_url": {
-          "name": "avatar_url",
-          "type": "text",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "timezone": {
-          "name": "timezone",
-          "type": "varchar(50)",
-          "primaryKey": false,
-          "notNull": false
+          "notNull": true
         },
         "created_at": {
           "name": "created_at",
@@ -756,11 +723,11 @@
       },
       "indexes": {},
       "foreignKeys": {
-        "profiles_user_id_users_id_fk": {
-          "name": "profiles_user_id_users_id_fk",
-          "tableFrom": "profiles",
-          "tableTo": "users",
-          "schemaTo": "auth",
+        "payees_user_id_user_id_fk": {
+          "name": "payees_user_id_user_id_fk",
+          "tableFrom": "payees",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -826,7 +793,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -859,10 +826,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "subscriptions_user_id_profiles_id_fk": {
-          "name": "subscriptions_user_id_profiles_id_fk",
+        "subscriptions_user_id_user_id_fk": {
+          "name": "subscriptions_user_id_user_id_fk",
           "tableFrom": "subscriptions",
-          "tableTo": "profiles",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -951,7 +919,7 @@
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         },
@@ -982,13 +950,13 @@
         },
         "created_by": {
           "name": "created_by",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
         "updated_by": {
           "name": "updated_by",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": false
         },
@@ -1034,10 +1002,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "transactions_user_id_profiles_id_fk": {
-          "name": "transactions_user_id_profiles_id_fk",
+        "transactions_user_id_user_id_fk": {
+          "name": "transactions_user_id_user_id_fk",
           "tableFrom": "transactions",
-          "tableTo": "profiles",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -1047,10 +1016,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "transactions_created_by_profiles_id_fk": {
-          "name": "transactions_created_by_profiles_id_fk",
+        "transactions_created_by_user_id_fk": {
+          "name": "transactions_created_by_user_id_fk",
           "tableFrom": "transactions",
-          "tableTo": "profiles",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
           "columnsFrom": [
             "created_by"
           ],
@@ -1060,10 +1030,11 @@
           "onDelete": "no action",
           "onUpdate": "no action"
         },
-        "transactions_updated_by_profiles_id_fk": {
-          "name": "transactions_updated_by_profiles_id_fk",
+        "transactions_updated_by_user_id_fk": {
+          "name": "transactions_updated_by_user_id_fk",
           "tableFrom": "transactions",
-          "tableTo": "profiles",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
           "columnsFrom": [
             "updated_by"
           ],
@@ -1203,25 +1174,26 @@
           "notNull": false,
           "default": "'2fc2db'"
         },
-        "parent_id": {
-          "name": "parent_id",
+        "parent_category_id": {
+          "name": "parent_category_id",
           "type": "integer",
           "primaryKey": false,
           "notNull": false
         },
         "user_id": {
           "name": "user_id",
-          "type": "integer",
+          "type": "uuid",
           "primaryKey": false,
           "notNull": true
         }
       },
       "indexes": {},
       "foreignKeys": {
-        "user_categories_user_id_profiles_id_fk": {
-          "name": "user_categories_user_id_profiles_id_fk",
+        "user_categories_user_id_user_id_fk": {
+          "name": "user_categories_user_id_user_id_fk",
           "tableFrom": "user_categories",
-          "tableTo": "profiles",
+          "tableTo": "user",
+          "schemaTo": "neon_auth",
           "columnsFrom": [
             "user_id"
           ],
@@ -1236,7 +1208,7 @@
           "tableFrom": "user_categories",
           "tableTo": "user_categories",
           "columnsFrom": [
-            "parent_id"
+            "parent_category_id"
           ],
           "columnsTo": [
             "id"
@@ -1251,9 +1223,9 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
-    "auth.users": {
-      "name": "users",
-      "schema": "auth",
+    "neon_auth.user": {
+      "name": "user",
+      "schema": "neon_auth",
       "columns": {
         "id": {
           "name": "id",
@@ -1311,8 +1283,7 @@
     }
   },
   "schemas": {
-    "app": "app",
-    "auth": "auth"
+    "neon_auth": "neon_auth"
   },
   "sequences": {},
   "roles": {},

@@ -1,5 +1,4 @@
 import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
-import { appSchema } from "./schema";
 
 export const currency = pgTable("currency", {
     id: serial().primaryKey(),

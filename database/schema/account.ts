@@ -6,11 +6,12 @@ import {
     pgTable,
     serial,
     timestamp,
+    uuid,
     varchar,
 } from "drizzle-orm/pg-core";
 import { currency } from "./curency";
-import { profile } from "./profile";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { user } from "./user";
 
 export const accountTypes = pgEnum("account_types", [
     "current",
@@ -28,11 +29,11 @@ export const account = pgTable("accounts", {
     currencyCodeId: integer("currency_code_id").references(() => currency.id),
     icon: varchar({ length: 10 }),
     color: varchar({ length: 10 }).default("2fc2db"),
-    userId: integer("user_id").references(() => profile.id).notNull(),
+    userId: uuid("user_id").references(() => user.id).notNull(),
     includeInNetWorth: boolean("include_in_net_worth").default(true),
     isActive: boolean("is_active").default(false),
-    createdBy: integer("created_by").references(() => profile.id),
-    updatedBy: integer("updated_by").references(() => profile.id),
+    createdBy: uuid("created_by").references(() => user.id),
+    updatedBy: uuid("updated_by").references(() => user.id),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date()),
 });

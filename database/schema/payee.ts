@@ -4,10 +4,10 @@ import {
     pgTable,
     serial,
     timestamp,
+    uuid,
     varchar,
 } from "drizzle-orm/pg-core";
-import { appSchema } from "./schema";
-import { profile } from "./profile";
+import { user } from "./user";
 
 export const payee = pgTable("payees", {
     id: serial().primaryKey(),
@@ -16,7 +16,7 @@ export const payee = pgTable("payees", {
     website: varchar({ length: 255 }),
     notes: varchar({ length: 500 }),
     isFavorite: boolean("is_favorite").default(false),
-    userId: integer("user_id").references(() => profile.id).notNull(),
+    userId: uuid("user_id").references(() => user.id).notNull(),
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date()),
 });
