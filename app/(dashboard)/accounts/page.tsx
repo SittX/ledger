@@ -1,6 +1,6 @@
 import { TAccount } from "@/types/account";
 import { getAllAccounts } from "@/services/account.service";
-import { DollarSign, Plus, Star } from "lucide-react";
+import { Plus, Star } from "lucide-react";
 import Link from "next/link";
 
 export default async function AccountPage() {
