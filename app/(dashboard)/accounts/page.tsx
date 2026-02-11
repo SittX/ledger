@@ -2,6 +2,9 @@ import { TAccount } from "@/types/account";
 import { getAllAccounts } from "@/services/account.service";
 import { Plus, Star } from "lucide-react";
 import Link from "next/link";
+import DataDoesNotExistDisplay from "@/components/ui/DataDoesNotExistDisplay";
+import { link } from "fs";
+import { text } from "drizzle-orm/pg-core";
 
 export default async function AccountPage() {
   const accounts: TAccount[] = await getAllAccounts(1);
@@ -15,7 +18,7 @@ export default async function AccountPage() {
           </p>
         </div>
         <Link href="/accounts/new" className="link">
-          <button className="btn btn-primary">
+          <button className="btn btn-soft btn-primary">
             <Plus size={16} />
             Create New Account
           </button>
@@ -23,6 +26,13 @@ export default async function AccountPage() {
       </div>
 
       <div className="flex flex-wrap gap-4">
+        {accounts.length <= 0 && (
+          <DataDoesNotExistDisplay
+            message="Currently there is no account."
+            link="/accounts/new"
+            text="Create New Account"
+          />
+        )}
         {accounts.map((account) => (
           <div key={account.id} className="card card-border bg-base-300 w-80">
             <div className="card-body p-4 space-y-4">
