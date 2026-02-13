@@ -8,9 +8,7 @@ import { getSessionCookie } from "better-auth/cookies";
 export function proxy(request: NextRequest) {
     const sessionCookie = getSessionCookie(request);
     if (!sessionCookie) {
-        const signInUrl = new URL("/sign-in", request.url);
-        signInUrl.searchParams.set("callbackUrl", request.nextUrl.pathname);
-        return NextResponse.redirect(signInUrl);
+        return NextResponse.redirect(new URL("/sign-in", request.url));
     }
     return NextResponse.next();
 }
