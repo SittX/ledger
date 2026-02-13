@@ -27,7 +27,7 @@ export default function Sidebar({ className }: SidebarProps) {
 
   async function handleSignOut() {
     await authClient.signOut();
-    router.push("/sign-in");
+    router.push("/dashboard");
     router.refresh();
   }
 
@@ -141,14 +141,17 @@ export default function Sidebar({ className }: SidebarProps) {
             className={cn(
               "flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg transition-colors",
               "hover:bg-default-100 text-foreground",
-              isActive("/dashboard/settings") && "bg-primary/10 text-primary font-medium",
+              isActive("/dashboard/settings") &&
+                "bg-primary/10 text-primary font-medium",
               isCollapsed && "justify-center px-2",
             )}
           >
             <Settings
               className={cn(
                 "w-5 h-5",
-                isActive("/dashboard/settings") ? "text-primary" : "text-default-600",
+                isActive("/dashboard/settings")
+                  ? "text-primary"
+                  : "text-default-600",
               )}
             />
             {!isCollapsed && (
@@ -230,10 +233,7 @@ export default function Sidebar({ className }: SidebarProps) {
                 )}
               </div>
             </div>
-            <button
-              aria-label="Log out"
-              onClick={handleSignOut}
-            >
+            <button aria-label="Log out" onClick={handleSignOut}>
               <LogOut className="w-4 h-4" />
             </button>
           </div>
