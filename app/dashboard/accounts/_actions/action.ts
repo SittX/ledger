@@ -4,6 +4,7 @@ import { createAccount, updateAccountById } from "@/services/account.service";
 import { redirect, RedirectType } from "next/navigation";
 import { TAccountFormValues } from "@/database/schema/account";
 
+// TODO: Here we might need to check status
 export async function accountCreateAction(data: TAccountFormValues) {
     await createAccount(data);
     redirect("/dashboard/accounts", RedirectType.replace);

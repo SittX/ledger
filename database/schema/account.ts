@@ -10,7 +10,7 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 import { currency } from "./currency";
-import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
+import { createInsertSchema } from "drizzle-zod";
 import { user } from "./auth";
 import { InferSelectModel } from "drizzle-orm";
 import z from "zod";

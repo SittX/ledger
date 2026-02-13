@@ -2,15 +2,26 @@
 
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { AccountFormSchema, TAccountFormValues } from '@/database/schema/account';
+import { AccountFormSchema, TAccount, TAccountFormValues } from '@/database/schema/account';
 import { Save } from 'lucide-react';
 
-type AccountFormProp = {
+type NewAccountProps = {
+    action: 'New';
     initialValues?: TAccountFormValues;
     onSubmit: (data: TAccountFormValues) => Promise<void>;
 };
 
-export default function AccountForm({ initialValues, onSubmit }: AccountFormProp) {
+type EditAccountProps = {
+    action: 'Edit';
+    initialValues: TAccount; // Usually required for editing
+    onSubmit: (id: number, data: TAccountFormValues) => Promise<void>;
+};
+
+type AccountFormProps = NewAccountProps | EditAccountProps;
+
+export default function AccountForm(props: AccountFormProps) {
+    const { action, initialValues } = props;
+
     const { register, handleSubmit, formState } = useForm<TAccountFormValues>({
         resolver: zodResolver(AccountFormSchema),
         defaultValues: initialValues,
@@ -18,13 +29,15 @@ export default function AccountForm({ initialValues, onSubmit }: AccountFormProp
 
     // RHF provides the validated data object here
     async function handleOnSubmit(data: TAccountFormValues) {
-        await onSubmit(data);
+        if (action === 'Edit') {
+            await props.onSubmit(1, data);
+        } else {
+            await props.onSubmit(data);
+        }
     }
 
     return (
-        <form
-            onSubmit={handleSubmit(handleOnSubmit)}
-            className="max-w-lg space-y-6 rounded-md border p-6 xl:mx-auto">
+        <form onSubmit={handleSubmit(handleOnSubmit)} className="max-w-lg space-y-6 rounded-md border p-6 xl:mx-auto">
             <label className="floating-label">
                 <span>Account Name</span>
                 <input
@@ -63,9 +76,7 @@ export default function AccountForm({ initialValues, onSubmit }: AccountFormProp
             </label>
 
             <div className="space-y-2">
-                <label
-                    className="label"
-                    htmlFor="includeInNetworth">
+                <label className="label" htmlFor="includeInNetworth">
                     <input
                         {...register('includeInNetWorth')}
                         id="includeInNetWorth"
@@ -75,33 +86,27 @@ export default function AccountForm({ initialValues, onSubmit }: AccountFormProp
                     />
                     Include In Networth
                 </label>
-                <p className="text-base-content/50 text-sm">
-                    Include this account in networth calculations
-                </p>
+                <p className="text-base-content/50 text-sm">Include this account in networth calculations</p>
             </div>
 
-            <div className="space-y-2">
-                <label
-                    className="label"
-                    htmlFor="primaryAccount">
-                    <input
-                        {...register('isPrimaryAccount')}
-                        id="isPrimaryAccount"
-                        name="isPrimaryAccount"
-                        type="checkbox"
-                        className="toggle toggle-sm checked:bg-primary checked:border-primary"
-                    />
-                    Primary Account
-                </label>
-                <p className="text-base-content/50 text-sm">
-                    Set this account as the primary expense account
-                </p>
-            </div>
+            {action === 'Edit' && (
+                <div className="space-y-2">
+                    <label className="label" htmlFor="primaryAccount">
+                        <input
+                            {...register('isPrimaryAccount')}
+                            id="isPrimaryAccount"
+                            name="isPrimaryAccount"
+                            type="checkbox"
+                            className="toggle toggle-sm checked:bg-primary checked:border-primary"
+                        />
+                        Primary Account
+                    </label>
+                    <p className="text-base-content/50 text-sm">Set this account as the primary expense account</p>
+                </div>
+            )}
 
             <div className="space-y-2">
-                <label
-                    className="label"
-                    htmlFor="active">
+                <label className="label" htmlFor="active">
                     <input
                         {...register('isActive')}
                         id="isActive"
@@ -111,20 +116,12 @@ export default function AccountForm({ initialValues, onSubmit }: AccountFormProp
                     />
                     Is Active
                 </label>
-                <p className="text-base-content/50 text-sm">
-                    Toggle account visibility in the dashboard
-                </p>
+                <p className="text-base-content/50 text-sm">Toggle account visibility in the dashboard</p>
             </div>
 
             <label className="floating-label">
-                <select
-                    {...register('accountType')}
-                    className="select"
-                    name="accountType"
-                    aria-label="Account type">
-                    <option
-                        value=""
-                        disabled>
+                <select {...register('accountType')} className="select" name="accountType" aria-label="Account type">
+                    <option value="" disabled>
                         Pick an account type
                     </option>
                     <option value="current">Current</option>
@@ -132,7 +129,7 @@ export default function AccountForm({ initialValues, onSubmit }: AccountFormProp
                     <option value="investment">Investment</option>
                 </select>
             </label>
-{/* 
+            {/* 
             <div className="space-y-2">
                 <label
                     className="label"
@@ -156,16 +153,10 @@ export default function AccountForm({ initialValues, onSubmit }: AccountFormProp
             </div> */}
 
             <div className="mt-4 flex items-center justify-end space-x-2">
-                <button
-                    type="button"
-                    className="btn btn-ghost"
-                    onClick={() => window.history.back()}>
+                <button type="button" className="btn btn-ghost" onClick={() => window.history.back()}>
                     Cancel
                 </button>
-                <button
-                    disabled={formState.isSubmitting}
-                    type="submit"
-                    className="btn btn-primary">
+                <button disabled={formState.isSubmitting} type="submit" className="btn btn-primary">
                     <Save size={18} />
                     Save
                 </button>
