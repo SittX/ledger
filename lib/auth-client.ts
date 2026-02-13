@@ -1,8 +1,9 @@
 import { createAuthClient } from "better-auth/react";
 
 const getBaseUrl = () => {
-    if (process.env.VERCEL_URL) {
-        return `https://${process.env.VERCEL_URL}`;
+    const vercelUrl = process.env.NEXT_PUBLIC_VERCEL_URL || process.env.VERCEL_URL;
+    if (vercelUrl) {
+        return `https://${vercelUrl}`;
     }
     console.log("Vercel URL not found. Fallback to local development URL.");
     return "http://localhost:3000";
