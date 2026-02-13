@@ -24,7 +24,7 @@ export default function AccountForm(params: { data?: TAccountInsert }) {
     accountType:
       (data?.accountType as "current" | "saving" | "investment") ?? "current",
     currencyCodeId: data?.currencyCodeId ?? 1,
-    userId: data?.userId ?? 1,
+    userId: data?.userId,
     id: data?.id ?? undefined,
   };
 
