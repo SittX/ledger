@@ -1,31 +1,55 @@
 import { db } from "@/database";
 import { account } from "@/database/schema";
-import { TAccount, TAccountInsert } from '@/types/account';
+import { AccountFormSchema, TAccount, TAccountFormValues } from "@/database/schema/account";
+import { auth } from "@/lib/auth";
 import { eq } from "drizzle-orm";
-import { createInsertSchema } from "drizzle-zod";
+import { headers } from "next/headers";
 
-export function getAllAccounts(userId: number): Promise<TAccount[]> {
-    return db.select().from(account);
+export async function getAllAccounts(): Promise<TAccount[]> {
+    const sessionHeaders = await headers();
+
+    const session = await auth.api.getSession({
+        headers: sessionHeaders,
+    });
+
+    if (!session || !session.user) {
+        throw new Error("Unauthorized: You must be logged in to view accounts.");
+    }
+
+    const userId = session.user.id;
+
+    return db.select().from(account).where(eq(account.userId, userId));
 }
 
 export function getAccountById(id: number): Promise<TAccount | undefined> {
     return db.select().from(account).where(eq(account.id, id)).then((rows) => rows[0]);
 }
 
-export async function createAccount(payload: TAccountInsert): Promise<TAccount | undefined> {
-    console.log(payload);
-    const accountCreateSchema = createInsertSchema(account);
-    const data = accountCreateSchema.parse(payload);
+export async function createAccount(payload: TAccountFormValues): Promise<TAccount | undefined> {
+    const sessionHeaders = await headers();
 
-    return db.insert(account).values(data).returning().then((rows) => rows[0]);
+    const session = await auth.api.getSession({
+        headers: sessionHeaders,
+    });
+
+    if (!session || !session.user) {
+        throw new Error("Unauthorized: You must be logged in to create an account.");
+    }
+
+    const userId = session.user.id;
+
+    const validatedData = AccountFormSchema.parse(payload);
+
+    return db.insert(account).values({ ...validatedData, userId }).returning().then((rows) => rows[0]);
 }
 
-export async function updateAccountById(id: number, payload: Partial<TAccountInsert>): Promise<TAccount | undefined> {
+export async function updateAccountById(id: number, payload: TAccountFormValues): Promise<TAccount | undefined> {
     return db.update(account)
         .set(payload)
         .where(eq(account.id, id))
         .returning()
         .then((rows) => rows[0]);
 };
+
 
 

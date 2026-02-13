@@ -2,7 +2,7 @@ CREATE TYPE "public"."account_types" AS ENUM('current', 'saving', 'investment');
 CREATE TYPE "public"."attachment_type" AS ENUM('photo', 'file', 'document');--> statement-breakpoint
 CREATE TYPE "public"."recurring_frequency" AS ENUM('daily', 'weekly', 'monthly', 'yearly');--> statement-breakpoint
 CREATE TYPE "public"."subscription_type" AS ENUM('monthly', 'yearly', 'quarterly');--> statement-breakpoint
-CREATE TABLE "accounts" (
+CREATE TABLE IF NOT EXISTS "accounts" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" varchar(500),
@@ -21,7 +21,7 @@ CREATE TABLE "accounts" (
 	"updated_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "attachments" (
+CREATE TABLE IF NOT EXISTS "attachments" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"attachment_type" "attachment_type",
 	"mime_type" varchar(255),
@@ -31,7 +31,7 @@ CREATE TABLE "attachments" (
 	"updated_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "budgets" (
+CREATE TABLE IF NOT EXISTS "budgets" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"notes" varchar(255),
@@ -53,7 +53,7 @@ CREATE TABLE "budgets" (
 	"updated_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "categories" (
+CREATE TABLE IF NOT EXISTS "categories" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"description" varchar(255),
@@ -64,7 +64,7 @@ CREATE TABLE "categories" (
 	"user_id" uuid
 );
 --> statement-breakpoint
-CREATE TABLE "currency" (
+CREATE TABLE IF NOT EXISTS "currency" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" varchar(255),
 	"currency_code" varchar(3),
@@ -73,7 +73,7 @@ CREATE TABLE "currency" (
 	CONSTRAINT "currency_symbol_unique" UNIQUE("symbol")
 );
 --> statement-breakpoint
-CREATE TABLE "goals" (
+CREATE TABLE IF NOT EXISTS "goals" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"notes" varchar(255),
@@ -89,7 +89,7 @@ CREATE TABLE "goals" (
 	"updated_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "payees" (
+CREATE TABLE IF NOT EXISTS "payees" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"name" varchar(255) NOT NULL,
 	"phone" varchar(20),
@@ -101,7 +101,7 @@ CREATE TABLE "payees" (
 	"updated_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "subscriptions" (
+CREATE TABLE IF NOT EXISTS "subscriptions" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" varchar(255) NOT NULL,
 	"notes" varchar(255),
@@ -114,7 +114,7 @@ CREATE TABLE "subscriptions" (
 	"updated_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "transactions" (
+CREATE TABLE IF NOT EXISTS "transactions" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"title" varchar(255),
 	"notes" varchar(255),
@@ -137,7 +137,7 @@ CREATE TABLE "transactions" (
 	"updated_at" timestamp
 );
 --> statement-breakpoint
-CREATE TABLE "transfers" (
+CREATE TABLE IF NOT EXISTS "transfers" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"from_account_id" integer NOT NULL,
 	"to_account_id" integer NOT NULL,
@@ -145,17 +145,6 @@ CREATE TABLE "transfers" (
 	"exchange_rate" numeric(12, 6),
 	"transaction_date" timestamp,
 	"fee" numeric(12, 2)
-);
---> statement-breakpoint
-CREATE TABLE "user_categories" (
-	"id" serial PRIMARY KEY NOT NULL,
-	"title" varchar(255) NOT NULL,
-	"description" varchar(255),
-	"category_type" varchar(30),
-	"icon" varchar(10),
-	"color" varchar(10) DEFAULT '2fc2db',
-	"parent_category_id" integer,
-	"user_id" uuid NOT NULL
 );
 --> statement-breakpoint
 ALTER TABLE "accounts" ADD CONSTRAINT "accounts_currency_code_id_currency_id_fk" FOREIGN KEY ("currency_code_id") REFERENCES "public"."currency"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
@@ -178,5 +167,3 @@ ALTER TABLE "transactions" ADD CONSTRAINT "transactions_created_by_user_id_fk" F
 ALTER TABLE "transactions" ADD CONSTRAINT "transactions_updated_by_user_id_fk" FOREIGN KEY ("updated_by") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "transfers" ADD CONSTRAINT "transfers_from_account_id_accounts_id_fk" FOREIGN KEY ("from_account_id") REFERENCES "public"."accounts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
 ALTER TABLE "transfers" ADD CONSTRAINT "transfers_to_account_id_accounts_id_fk" FOREIGN KEY ("to_account_id") REFERENCES "public"."accounts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "user_categories" ADD CONSTRAINT "user_categories_user_id_user_id_fk" FOREIGN KEY ("user_id") REFERENCES "neon_auth"."user"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
-ALTER TABLE "user_categories" ADD CONSTRAINT "user_category_parent_id_fk" FOREIGN KEY ("parent_category_id") REFERENCES "public"."user_categories"("id") ON DELETE no action ON UPDATE no action;

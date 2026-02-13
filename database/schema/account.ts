@@ -10,8 +10,10 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 import { currency } from "./currency";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema, createUpdateSchema } from "drizzle-zod";
 import { user } from "./auth";
+import { InferSelectModel } from "drizzle-orm";
+import z from "zod";
 
 export const accountTypes = pgEnum("account_types", [
     "current",
@@ -38,5 +40,15 @@ export const account = pgTable("accounts", {
     updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date()),
 });
 
+// Schema are for validating form data
 export const AccountCreateSchema = createInsertSchema(account);
-export const AccountSelectSchema = createSelectSchema(account);
+export const AccountFormSchema = AccountCreateSchema.omit({
+    userId: true,
+    createdAt: true,
+    createdBy: true,
+    updatedAt: true,
+    updatedBy: true
+});
+
+export type TAccountFormValues = z.infer<typeof AccountFormSchema>;
+export type TAccount = InferSelectModel<typeof account>;

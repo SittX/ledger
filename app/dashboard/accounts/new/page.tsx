@@ -1,3 +1,4 @@
+import { accountCreateAction } from "../_actions/action";
 import AccountForm from "../_components/AccountForm";
 
 export default function AccountCreatePage() {
@@ -9,7 +10,7 @@ export default function AccountCreatePage() {
           Fill in the details below to create a new account.
         </p>
       </div>
-      <AccountForm />
+      <AccountForm onSubmit={accountCreateAction} />
     </div>
   );
 }

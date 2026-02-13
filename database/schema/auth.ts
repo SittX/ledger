@@ -16,7 +16,6 @@ import { goal } from "./goal";
 import { payee } from "./payee";
 import { subscription } from "./subscription";
 import { transaction } from "./transaction";
-import { userCategory } from "./user-category";
 
 export const neonAuth = pgSchema("neon_auth");
 
@@ -134,7 +133,6 @@ export const userRelations = relations(user, ({ many }) => ({
     transactions_updatedBy: many(transaction, {
         relationName: "transactions_updatedBy_userInNeonAuth_id",
     }),
-    userCategories: many(userCategory),
 }));
 
 export const sessionRelations = relations(session, ({ one }) => ({

@@ -1,7 +1,6 @@
 // Core tables
 export { currency } from "./currency";
 export { category } from "./category";
-export { userCategory } from "./user-category";
 
 // Account related
 export { account, accountTypes } from "./account";
