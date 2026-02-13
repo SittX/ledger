@@ -8,11 +8,12 @@
     "start": "next start",
     "lint": "eslint",
     "db:generate": "npx drizzle-kit generate",
-    "db:migrate": "npx drizzle-kit migrate"
+    "db:migrate": "npx drizzle-kit migrate",
+    "db:pull": "npx drizzle-kit pull"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
-    "@neondatabase/auth": "^0.1.0-beta.21",
+    "better-auth": "^1.4.18",
     "dotenv": "^17.2.3",
     "drizzle-orm": "^0.45.1",
     "drizzle-zod": "^0.8.3",

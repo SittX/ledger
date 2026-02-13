@@ -1,5 +1,5 @@
 // Core tables
-export { currency } from "./curency";
+export { currency } from "./currency";
 export { category } from "./category";
 export { userCategory } from "./user-category";
 

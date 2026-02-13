@@ -1,13 +1,12 @@
 import {
     boolean,
-    integer,
     pgTable,
     serial,
     timestamp,
     uuid,
     varchar,
 } from "drizzle-orm/pg-core";
-import { user } from "./user";
+import { user } from "./auth";
 
 export const payee = pgTable("payees", {
     id: serial().primaryKey(),

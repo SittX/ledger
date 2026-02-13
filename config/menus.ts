@@ -17,24 +17,24 @@ export const menuSections: MenuSection[] = [
         title: "TRANSACTIONS",
         items: [
             {
-                name: "Home", href: "/", icon: Home, order: 1
+                name: "Home", href: "/dashboard", icon: Home, order: 1
             },
-            { name: "Transactions", href: "/transactions", icon: ChartColumn, order: 2 },
+            { name: "Transactions", href: "/dashboard/transactions", icon: ChartColumn, order: 2 },
         ],
     },
     {
         title: "MANAGEMENT",
         items: [
-            { name: "Accounts", href: "/accounts", icon: Wallet, order: 3 },
-            { name: "Category", href: "/category", icon: Tags, order: 4 },
+            { name: "Accounts", href: "/dashboard/accounts", icon: Wallet, order: 3 },
+            { name: "Category", href: "/dashboard/category", icon: Tags, order: 4 },
             {
                 name: "Subscriptions",
-                href: "/subscriptions",
+                href: "/dashboard/subscriptions",
                 icon: BellRing,
                 order: 5,
             },
-            { name: "Budgets", href: "/budgets", icon: ChartPie, order: 6 },
-            { name: "Goals", href: "/goals", icon: Goal, order: 7 },
+            { name: "Budgets", href: "/dashboard/budgets", icon: ChartPie, order: 6 },
+            { name: "Goals", href: "/dashboard/goals", icon: Goal, order: 7 },
         ],
     },
 ];

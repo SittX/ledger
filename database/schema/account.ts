@@ -9,9 +9,9 @@ import {
     uuid,
     varchar,
 } from "drizzle-orm/pg-core";
-import { currency } from "./curency";
+import { currency } from "./currency";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import { user } from "./user";
+import { user } from "./auth";
 
 export const accountTypes = pgEnum("account_types", [
     "current",

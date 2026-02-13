@@ -9,7 +9,7 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 import { category } from "./category";
-import { user } from "./user";
+import { user } from "./auth";
 
 export const subscriptionType = pgEnum("subscription_type", [
     "monthly",

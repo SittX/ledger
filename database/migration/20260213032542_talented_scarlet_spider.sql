@@ -1,0 +1,1 @@
+-- Schema already applied via 20260210005542_neon_auth_core.sql; this migration is a no-op for compatibility.

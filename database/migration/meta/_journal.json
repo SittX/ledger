@@ -1,13 +1,1 @@
-{
-  "version": "7",
-  "dialect": "postgresql",
-  "entries": [
-    {
-      "idx": 0,
-      "version": "7",
-      "when": 1770684943809,
-      "tag": "20260210005543_wonderful_riptide",
-      "breakpoints": true
-    }
-  ]
-}
+{"version":"7","dialect":"postgresql","entries":[{"idx":0,"version":"7","when":1770684943808,"tag":"20260210005542_neon_auth_core","breakpoints":true},{"idx":1,"version":"7","when":1770684943809,"tag":"20260210005543_wonderful_riptide","breakpoints":true},{"idx":2,"version":"7","when":1770953142373,"tag":"20260213032542_talented_scarlet_spider","breakpoints":true}]}

@@ -1,5 +1,6 @@
 import { foreignKey, integer, pgTable, serial, uuid, varchar } from "drizzle-orm/pg-core";
-import { user } from "./user";
+import { user } from "./auth";
+
 
 // User-defined categories - separate from system categories
 export const userCategory = pgTable("user_categories", {

@@ -11,7 +11,7 @@ import {
     varchar,
 } from "drizzle-orm/pg-core";
 import { category } from "./category";
-import { user } from "./user";
+import { user } from "./auth";
 
 export const recurringFrequency = pgEnum("recurring_frequency", [
     "daily",

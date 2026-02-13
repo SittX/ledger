@@ -10,7 +10,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { category } from "./category";
 import { account } from "./account";
-import { user } from "./user";
+import { user } from "./auth";
 
 // Forward references - these will be imported when needed
 // goal, subscription, attachment, payee tables

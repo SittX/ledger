@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import NextLink from "next/link";
 
@@ -13,6 +13,7 @@ import {
   LogOut,
 } from "lucide-react";
 import { menuSections } from "@/config/menus";
+import { authClient } from "@/lib/auth-client";
 
 interface SidebarProps {
   className?: string;
@@ -21,14 +22,22 @@ interface SidebarProps {
 export default function Sidebar({ className }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  const { data: session } = authClient.useSession();
+
+  async function handleSignOut() {
+    await authClient.signOut();
+    router.push("/sign-in");
+    router.refresh();
+  }
 
   const toggleSidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
 
   const isActive = (href: string) => {
-    if (href === "/") {
-      return pathname === "/";
+    if (href === "/dashboard") {
+      return pathname === "/dashboard" || pathname === "/dashboard/";
     }
     return pathname.startsWith(href);
   };
@@ -128,25 +137,25 @@ export default function Sidebar({ className }: SidebarProps) {
       <div className="border-t border-divider pt-4 pb-2">
         <div className="space-y-1">
           <NextLink
-            href="/settings"
+            href="/dashboard/settings"
             className={cn(
               "flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg transition-colors",
               "hover:bg-default-100 text-foreground",
-              isActive("/settings") && "bg-primary/10 text-primary font-medium",
+              isActive("/dashboard/settings") && "bg-primary/10 text-primary font-medium",
               isCollapsed && "justify-center px-2",
             )}
           >
             <Settings
               className={cn(
                 "w-5 h-5",
-                isActive("/settings") ? "text-primary" : "text-default-600",
+                isActive("/dashboard/settings") ? "text-primary" : "text-default-600",
               )}
             />
             {!isCollapsed && (
               <span
                 className={cn(
                   "text-sm",
-                  isActive("/settings") && "font-medium",
+                  isActive("/dashboard/settings") && "font-medium",
                 )}
               >
                 Settings
@@ -194,19 +203,16 @@ export default function Sidebar({ className }: SidebarProps) {
             <div className="flex items-center gap-3">
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-semibold text-foreground truncate">
-                  User Name
+                  {session?.user?.name ?? "Guest"}
                 </p>
                 <p className="text-xs text-muted-foreground truncate">
-                  Admin Manager
+                  {session?.user?.email ?? ""}
                 </p>
               </div>
             </div>
             <button
               className="btn w-full justify-start"
-              onClick={() => {
-                // Handle logout
-                console.log("Logout clicked");
-              }}
+              onClick={handleSignOut}
             >
               Log out
             </button>
@@ -215,15 +221,18 @@ export default function Sidebar({ className }: SidebarProps) {
           <div className="flex flex-col items-center gap-2">
             <div className="avatar">
               <div className="w-24 rounded">
-                <img src="https://img.daisyui.com/images/profile/demo/batperson@192.webp" />
+                {session?.user?.image ? (
+                  <img src={session.user.image} alt="" />
+                ) : (
+                  <div className="w-24 rounded bg-base-200 flex items-center justify-center text-lg font-semibold text-base-content/70">
+                    {session?.user?.name?.charAt(0) ?? "?"}
+                  </div>
+                )}
               </div>
             </div>
             <button
               aria-label="Log out"
-              onClick={() => {
-                // Handle logout
-                console.log("Logout clicked");
-              }}
+              onClick={handleSignOut}
             >
               <LogOut className="w-4 h-4" />
             </button>

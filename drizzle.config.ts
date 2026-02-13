@@ -11,7 +11,7 @@ export default defineConfig({
     },
 
     extensionsFilters: ["postgis"],
-    schemaFilter: "public",
+    schemaFilter: ["public"],
     tablesFilter: "*",
 
     introspect: {
