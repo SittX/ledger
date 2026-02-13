@@ -36,7 +36,6 @@ export const env = {
     // Database
     DATABASE_URL: process.env.DATABASE_URL!,
     // Better Auth
-    BETTER_AUTH_URL: process.env.BETTER_AUTH_URL!,
     BETTER_AUTH_SECRET: process.env.BETTER_AUTH_SECRET!,
     // Node Environment
     NODE_ENV: nodeEnv,
@@ -45,7 +44,6 @@ export const env = {
 // Validate required environment variables
 const requiredEnvVars = [
     "DATABASE_URL",
-    "BETTER_AUTH_URL",
     "BETTER_AUTH_SECRET",
 ] as const;
 
