@@ -1,6 +1,6 @@
+import Header from "@/components/ui/navbar";
+import Sidebar from "@/components/ui/sidebar";
 import type { Metadata } from "next";
-import Sidebar from "@/components/ui/Sidebar";
-import Header from "@/components/ui/Navbar";
 
 export const metadata: Metadata = {
   title: "Ledger",
