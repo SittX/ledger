@@ -37,7 +37,9 @@ export default function AccountForm(props: AccountFormProps) {
     }
 
     return (
-        <form onSubmit={handleSubmit(handleOnSubmit)} className="max-w-lg space-y-6 rounded-md border p-6 xl:mx-auto">
+        <form
+            onSubmit={handleSubmit(handleOnSubmit)}
+            className="bg-base-200 mx-auto space-y-6 rounded-md p-6 xl:mx-0 xl:w-2xl">
             <label className="floating-label">
                 <span>Account Name</span>
                 <input

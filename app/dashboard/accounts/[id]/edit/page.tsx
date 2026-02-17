@@ -8,8 +8,8 @@ export default async function AccountDetailsEditPage({ params }: { params: Promi
     const account = await getAccountById(Number(id));
 
     return (
-        <div className="min-w-full space-y-6 xl:space-y-12">
-            <div className="max-w-md">
+        <div className="space-y-6">
+            <div>
                 <h1 className="text-lg font-semibold">Edit existing Account</h1>
                 <p className="text-base-content/50 text-base">Fill in the details below to update an account.</p>
             </div>
