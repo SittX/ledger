@@ -1,20 +1,24 @@
 import { TAccount } from '@/database/schema/account';
 
 type TransactionFormProps = {
-    action: 'Income' | 'Expense';
+    action: 'Income' | 'Expense' | 'Transfer';
     accounts: TAccount[];
 };
 
 export default function TransactionForm({ action, accounts }: TransactionFormProps) {
     return (
-        <form>
+        <form action={action}>
             <div className="card">
                 <div className="card-body">
                     <section className="space-y-4">
                         <h3 className="text-lg font-semibold">{action} Account</h3>
                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                            <label className="floating-label">
+                            <label className="select">
+                                <span className="label">Account</span>
                                 <select className="select" name="accountType" aria-label="Account type">
+                                    <option value="" disabled>
+                                        Pick an account
+                                    </option>
                                     {accounts.map((account) => {
                                         return (
                                             <option key={account.id} value={account.id}>
@@ -33,7 +37,7 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                         <h3 className="text-lg font-semibold">Amount & Date</h3>
                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                             <label className="floating-label">
-                                <span>Amount</span>
+                                <span>Amount {action == 'Income' ? 'Credit (+)' : 'Debit (-)'}</span>
                                 <input
                                     type="number"
                                     id="amount"
@@ -90,8 +94,9 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
 
                     <section className="space-y-4">
                         <h3 className="text-lg font-semibold">Details</h3>
-                        <div className="space-y-6">
-                            <label className="floating-label">
+                        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+                            <label className="select">
+                                <span className="label">Category</span>
                                 <select className="select" name="accountType" aria-label="Account type">
                                     <option value="" disabled>
                                         Pick a category
@@ -105,6 +110,18 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                                     <option value="entertainment">Entertainment</option>
                                     <option value="health">Health & Wellness</option>
                                 </select>
+                            </label>
+
+                            <label className="floating-label">
+                                <span>Payee</span>
+                                <input
+                                    type="text"
+                                    id="payee"
+                                    name="payee"
+                                    className="input required w-full"
+                                    placeholder="Payee"
+                                    required
+                                />
                             </label>
                         </div>
                     </section>
@@ -131,7 +148,7 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                         </div>
                     </section>
 
-                    <section className="card-footer justify-end">
+                    <section className="card-actions justify-end">
                         <button className="btn btn-ghost" type="reset">
                             Cancel
                         </button>
