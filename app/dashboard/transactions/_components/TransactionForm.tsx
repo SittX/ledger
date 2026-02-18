@@ -1,13 +1,39 @@
+'use client';
 import { TAccount } from '@/database/schema/account';
+import { TransactionFormSchema, TTransactionFormValues } from '@/database/schema/transaction';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { transactionCreateAction } from '../_actions/action';
 
 type TransactionFormProps = {
     action: 'Income' | 'Expense' | 'Transfer';
     accounts: TAccount[];
 };
 
+/**
+ * TODO:
+ * 1. Setup RHF with zod
+ * 2. Register input with RHF
+ * 3. Handle submitted value with form action
+ */
+
 export default function TransactionForm({ action, accounts }: TransactionFormProps) {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<TTransactionFormValues>({
+        resolver: zodResolver(TransactionFormSchema),
+    });
+
+    console.log(errors);
+
+    async function onSubmit(data: TTransactionFormValues) {
+        transactionCreateAction(action, data);
+    }
+
     return (
-        <form action={action}>
+        <form onSubmit={handleSubmit(onSubmit)}>
             <div className="card">
                 <div className="card-body">
                     <section className="space-y-4">
@@ -15,7 +41,10 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                             <label className="select">
                                 <span className="label">Account</span>
-                                <select className="select" name="accountType" aria-label="Account type">
+                                <select
+                                    className="select"
+                                    aria-label="Account"
+                                    {...register('accountId', { valueAsNumber: true })}>
                                     <option value="" disabled>
                                         Pick an account
                                     </option>
@@ -41,9 +70,9 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                                 <input
                                     type="number"
                                     id="amount"
-                                    name="amount"
                                     className="input required number w-full"
                                     placeholder="Amount"
+                                    {...register('amount')}
                                     required
                                 />
                             </label>
@@ -53,8 +82,8 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                                 <input
                                     type="datetime-local"
                                     id="transaction_datetime"
-                                    name="transaction_datetime"
                                     className="input required date w-full"
+                                    {...register('transactionDate', { valueAsDate: true })}
                                     required
                                 />
                             </label>
@@ -71,9 +100,9 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                                 <input
                                     type="text"
                                     id="title"
-                                    name="title"
                                     className="input required w-full"
                                     placeholder="Title"
+                                    {...register('title')}
                                     required
                                 />
                             </label>
@@ -82,9 +111,9 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                                 <span>Notes (Optional)</span>
                                 <textarea
                                     id="notes"
-                                    name="notes"
                                     className="textarea w-full"
                                     placeholder="Notes (Optional)"
+                                    {...register('notes')}
                                 />
                             </label>
                         </div>
@@ -97,18 +126,21 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
                             <label className="select">
                                 <span className="label">Category</span>
-                                <select className="select" name="accountType" aria-label="Account type">
+                                <select
+                                    className="select"
+                                    aria-label="Account type"
+                                    {...register('categoryId', { valueAsNumber: true })}>
                                     <option value="" disabled>
                                         Pick a category
                                     </option>
-                                    <option value="food">Food & Dining</option>
-                                    <option value="subscription">Subscriptions</option>
-                                    <option value="drinks">Drinks</option>
-                                    <option value="shopping">Shopping</option>
-                                    <option value="transportation">Transportation</option>
-                                    <option value="utilities">Utilities</option>
-                                    <option value="entertainment">Entertainment</option>
-                                    <option value="health">Health & Wellness</option>
+                                    <option value="1">Food & Dining</option>
+                                    <option value="2">Subscriptions</option>
+                                    <option value="3">Drinks</option>
+                                    <option value="4">Shopping</option>
+                                    <option value="5">Transportation</option>
+                                    <option value="6">Utilities</option>
+                                    <option value="7">Entertainment</option>
+                                    <option value="8">Health & Wellness</option>
                                 </select>
                             </label>
 
@@ -117,10 +149,9 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                                 <input
                                     type="text"
                                     id="payee"
-                                    name="payee"
                                     className="input required w-full"
                                     placeholder="Payee"
-                                    required
+                                    {...register('payeeId', { valueAsNumber: true })}
                                 />
                             </label>
                         </div>

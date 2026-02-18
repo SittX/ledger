@@ -1,4 +1,3 @@
-'use client';
 // id serial not null,
 //   title character varying(255) null,
 //   notes character varying(255) null,
@@ -15,43 +14,15 @@
 //   status character varying(20) null,
 //   is_deleted boolean null default false,
 
-import { redirect } from 'next/navigation';
+import { auth } from '@/lib/auth';
+import { getAllTransactionForUser } from '@/services/transaction.service';
+import { headers } from 'next/headers';
 
 //   reconciliation_date timestamp without time zone null,
-export default function TransactionPage() {
-    function handleRowClick() {
-        redirect('/dashboard/transactions/1');
-    }
+export default async function TransactionPage() {
+    const userId = await getSessionUserId();
 
-    const rows = [
-        {
-            date: 'Feb 1, 2026',
-            description: 'Mobile Bills',
-            category: 'Subscriptions',
-            amount: '- 10,000 MMK',
-            amountClass: 'text-error',
-            rowClass: 'hover:bg-base-300 hover:cursor-pointer',
-            onClick: handleRowClick,
-        },
-        {
-            date: 'Feb 14, 2026',
-            description: 'Dinner at M Tower',
-            category: 'Foods',
-            amount: '- 80,000 MMK',
-            amountClass: 'text-error',
-            rowClass: 'hover:bg-base-300 hover:cursor-pointer',
-            onClick: handleRowClick,
-        },
-        {
-            date: 'Feb 28, 2026',
-            description: 'Monthly salary',
-            category: 'Salary',
-            amount: '+ 800,000 MMK',
-            amountClass: 'text-success',
-            rowClass: 'hover:bg-base-300 hover:cursor-pointer',
-            onClick: handleRowClick,
-        },
-    ];
+    const rows = await getAllTransactionForUser(userId);
 
     return (
         <div className="space-y-6">
@@ -72,11 +43,13 @@ export default function TransactionPage() {
                     </thead>
                     <tbody>
                         {rows.map((r, i) => (
-                            <tr key={i} className={r.rowClass} onClick={r.onClick}>
-                                <td>{r.date}</td>
-                                <td>{r.description}</td>
-                                <td>{r.category}</td>
-                                <td className={r.amountClass}>{r.amount}</td>
+                            <tr key={i}>
+                                <td>{r.transactionDate?.toDateString()}</td>
+                                <td>{r.notes}</td>
+                                <td>{r.categoryId}</td>
+                                <td className={r.transactionType === 'Income' ? 'text-success' : 'text-error'}>
+                                    {r.transactionType === 'Income' ? ' + ' + r.amount : ' - ' + r.amount}
+                                </td>
                             </tr>
                         ))}
                     </tbody>
@@ -84,4 +57,20 @@ export default function TransactionPage() {
             </div>
         </div>
     );
+}
+
+// Utility functions
+async function getSessionUserId() {
+    const sessionHeaders = await headers();
+
+    const session = await auth.api.getSession({
+        headers: sessionHeaders,
+    });
+
+    if (!session || !session.user) {
+        throw new Error('Unauthorized: You must be logged in to create an account.');
+    }
+
+    const userId = session.user.id;
+    return userId;
 }

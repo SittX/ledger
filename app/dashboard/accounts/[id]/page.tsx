@@ -1,37 +1,40 @@
 import { getAccountById } from '@/services/account.service';
 import Link from 'next/link';
 import { ArrowLeft, History, Info } from 'lucide-react';
+import { getAllTransactionForAccount } from '@/services/transaction.service';
 
 export default async function AccountEditPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     const accountData = await getAccountById(Number(id));
 
-    const rows = [
-        {
-            date: 'Feb 1, 2026',
-            description: 'Mobile Bills',
-            category: 'Subscriptions',
-            amount: '- 10,000 MMK',
-            amountClass: 'text-error',
-            rowClass: 'hover:bg-base-300 hover:cursor-pointer',
-        },
-        {
-            date: 'Feb 14, 2026',
-            description: 'Dinner at M Tower',
-            category: 'Foods',
-            amount: '- 80,000 MMK',
-            amountClass: 'text-error',
-            rowClass: 'hover:bg-base-300 hover:cursor-pointer',
-        },
-        {
-            date: 'Feb 28, 2026',
-            description: 'Monthly salary',
-            category: 'Salary',
-            amount: '+ 800,000 MMK',
-            amountClass: 'text-success',
-            rowClass: 'hover:bg-base-300 hover:cursor-pointer',
-        },
-    ];
+    // const rows = [
+    //     {
+    //         date: 'Feb 1, 2026',
+    //         description: 'Mobile Bills',
+    //         category: 'Subscriptions',
+    //         amount: '- 10,000 MMK',
+    //         amountClass: 'text-error',
+    //         rowClass: 'hover:bg-base-300 hover:cursor-pointer',
+    //     },
+    //     {
+    //         date: 'Feb 14, 2026',
+    //         description: 'Dinner at M Tower',
+    //         category: 'Foods',
+    //         amount: '- 80,000 MMK',
+    //         amountClass: 'text-error',
+    //         rowClass: 'hover:bg-base-300 hover:cursor-pointer',
+    //     },
+    //     {
+    //         date: 'Feb 28, 2026',
+    //         description: 'Monthly salary',
+    //         category: 'Salary',
+    //         amount: '+ 800,000 MMK',
+    //         amountClass: 'text-success',
+    //         rowClass: 'hover:bg-base-300 hover:cursor-pointer',
+    //     },
+    // ];
+
+    const rows = await getAllTransactionForAccount(Number(id));
 
     return (
         <div className="space-y-6">
@@ -115,11 +118,13 @@ export default async function AccountEditPage({ params }: { params: Promise<{ id
                     </thead>
                     <tbody>
                         {rows.map((r, i) => (
-                            <tr key={i} className={r.rowClass}>
-                                <td>{r.date}</td>
-                                <td>{r.description}</td>
-                                <td>{r.category}</td>
-                                <td className={r.amountClass}>{r.amount}</td>
+                            <tr key={i}>
+                                <td>{r.transactionDate?.toDateString()}</td>
+                                <td>{r.notes}</td>
+                                <td>{r.categoryId}</td>
+                                <td className={r.transactionType === 'Income' ? 'text-success' : 'text-error'}>
+                                    {r.transactionType === 'Income' ? ' + ' + r.amount : ' - ' + r.amount}
+                                </td>
                             </tr>
                         ))}
                     </tbody>

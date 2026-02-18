@@ -11,6 +11,9 @@ import {
 import { category } from "./category";
 import { account } from "./account";
 import { user } from "./auth";
+import { createInsertSchema } from "drizzle-zod";
+import z from "zod";
+import { InferSelectModel } from "drizzle-orm";
 
 // Forward references - these will be imported when needed
 // goal, subscription, attachment, payee tables
@@ -37,3 +40,16 @@ export const transaction = pgTable("transactions", {
     createdAt: timestamp("created_at").defaultNow(),
     updatedAt: timestamp("updated_at").$onUpdateFn(() => new Date()),
 });
+
+
+export const TransactionCreateSchema = createInsertSchema(transaction);
+export const TransactionFormSchema = TransactionCreateSchema.omit({
+    userId: true,
+    createdAt: true,
+    createdBy: true,
+    updatedAt: true,
+    updatedBy: true
+});
+
+export type TTransactionFormValues = z.infer<typeof TransactionFormSchema>;
+export type TTransaction = InferSelectModel<typeof transaction>;
