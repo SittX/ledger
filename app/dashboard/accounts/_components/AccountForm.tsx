@@ -32,7 +32,7 @@ export default function AccountForm(props: AccountFormProps) {
     // RHF provides the validated data object here
     async function handleOnSubmit(data: TAccountFormValues) {
         if (action === 'Edit') {
-            await props.onSubmit('1', data);
+            await props.onSubmit(initialValues.id, data);
         } else {
             await props.onSubmit(data);
         }
