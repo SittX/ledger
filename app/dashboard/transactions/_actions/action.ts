@@ -15,7 +15,7 @@ export async function transactionCreateAction(
     const userId = await getSessionUserId();
     console.log("Form values", values);
 
-    const accountId = values.accountId as number;
+    const accountId = values.accountId as string;
 
     const selectedAccount = await db.select()
         .from(account)
