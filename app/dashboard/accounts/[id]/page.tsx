@@ -5,7 +5,7 @@ import { getAllTransactionForAccount } from '@/services/transaction.service';
 
 export default async function AccountEditPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
-    const accountData = await getAccountById(Number(id));
+    const accountData = await getAccountById(id);
 
     // const rows = [
     //     {
@@ -34,7 +34,7 @@ export default async function AccountEditPage({ params }: { params: Promise<{ id
     //     },
     // ];
 
-    const rows = await getAllTransactionForAccount(Number(id));
+    const rows = await getAllTransactionForAccount(id);
 
     return (
         <div className="space-y-6">

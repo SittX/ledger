@@ -4,7 +4,6 @@ import {
     numeric,
     pgEnum,
     pgTable,
-    serial,
     timestamp,
     uuid,
     varchar,
@@ -22,7 +21,7 @@ export const accountTypes = pgEnum("account_types", [
 ]);
 
 export const account = pgTable("accounts", {
-    id: serial().primaryKey(),
+    id: uuid().defaultRandom().primaryKey(),
     title: varchar({ length: 255 }).notNull(),
     description: varchar({ length: 500 }),
     accountType: accountTypes("account_type").default("current"),

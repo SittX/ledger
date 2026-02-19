@@ -14,24 +14,27 @@ import { user } from "./auth";
 import { createInsertSchema } from "drizzle-zod";
 import z from "zod";
 import { InferSelectModel } from "drizzle-orm";
+import { goal } from "./goal";
+import { subscription } from "./subscription";
+import { attachment } from "./attachment";
 
 // Forward references - these will be imported when needed
 // goal, subscription, attachment, payee tables
 
 export const transaction = pgTable("transactions", {
-    id: serial().primaryKey(),
+    id: uuid().defaultRandom().primaryKey(),
     title: varchar({ length: 255 }),
     notes: varchar({ length: 255 }),
     transactionType: varchar("transaction_type", { length: 20 }),
-    categoryId: integer("category_id").references(() => category.id),
-    goalId: integer("goal_id"),
-    subscriptionId: integer("subscription_id"),
-    accountId: integer("account_id").references(() => account.id),
+    categoryId: uuid("category_id").references(() => category.id),
+    goalId: uuid("goal_id").references(() => goal.id),
+    subscriptionId: uuid("subscription_id").references(() => subscription.id),
+    accountId: uuid("account_id").references(() => account.id),
     amount: numeric({ precision: 12, scale: 2 }).notNull(),
     transactionDate: timestamp("transaction_date"),
-    attachmentId: integer("attachment_id"),
+    attachmentId: uuid("attachment_id").references(() => attachment.id),
     userId: uuid("user_id").references(() => user.id).notNull(),
-    payeeId: integer("payee_id"),
+    payeeId: uuid("payee_id"),
     status: varchar({ length: 20 }),
     isDeleted: boolean("is_deleted").default(false),
     reconciliationDate: timestamp("reconciliation_date"),

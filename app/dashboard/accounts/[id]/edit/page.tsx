@@ -5,7 +5,7 @@ import AccountForm from '../../_components/AccountForm';
 export default async function AccountDetailsEditPage({ params }: { params: Promise<{ id: string }> }) {
     const { id } = await params;
     // TODO: Here I have done account! to ensure that the result data is not undefined. Is it normal? Is there any way to handle this?
-    const account = await getAccountById(Number(id));
+    const account = await getAccountById(id);
 
     return (
         <div className="space-y-6">

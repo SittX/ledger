@@ -5,6 +5,8 @@ import { account } from '@/database/schema';
 import { eq } from 'drizzle-orm';
 import { headers } from 'next/headers';
 import { auth } from '@/lib/auth';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
 
 // TODO: This will be a DB transaction
 export async function transactionCreateAction(
@@ -35,6 +37,9 @@ export async function transactionCreateAction(
     await db.update(account)
         .set({ balance: finalBalance.toString() })
         .where(eq(account.id, accountId))
+
+    revalidatePath("/dashboard/transactions");
+    redirect("/dashboard/transactions")
 }
 
 // Utility functions

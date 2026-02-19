@@ -3,7 +3,6 @@ import {
     integer,
     numeric,
     pgTable,
-    serial,
     timestamp,
     uuid,
     varchar,
@@ -12,7 +11,7 @@ import { category } from "./category";
 import { user } from "./auth";
 
 export const goal = pgTable("goals", {
-    id: serial().primaryKey(),
+    id: uuid().defaultRandom().primaryKey(),
     title: varchar({ length: 255 }).notNull(),
     notes: varchar({ length: 255 }),
     amount: numeric({ precision: 12, scale: 2 }).notNull(),

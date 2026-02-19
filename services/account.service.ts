@@ -26,7 +26,7 @@ export async function getAllAccounts(): Promise<TAccount[]> {
         .orderBy(account.createdAt);
 }
 
-export async function getAccountById(id: number): Promise<TAccount | undefined> {
+export async function getAccountById(id: string): Promise<TAccount | undefined> {
     const userId = await getSessionUserId();
 
     const response = await db.select()
@@ -48,7 +48,7 @@ export async function createAccount(payload: TAccountFormValues): Promise<TAccou
     return response[0];
 }
 
-export async function togglePrimaryAccount(id: number, status: boolean, formData: FormData): Promise<void> {
+export async function togglePrimaryAccount(id: string, status: boolean, formData: FormData): Promise<void> {
     const userId = await getSessionUserId();
 
     await db.update(account)
@@ -57,7 +57,7 @@ export async function togglePrimaryAccount(id: number, status: boolean, formData
 }
 
 
-export async function updateAccountById(id: number, payload: TAccountFormValues): Promise<TAccount | undefined> {
+export async function updateAccountById(id: string, payload: TAccountFormValues): Promise<TAccount | undefined> {
     const userId = await getSessionUserId();
 
     const validatedData = AccountFormSchema.parse(payload);
@@ -70,7 +70,7 @@ export async function updateAccountById(id: number, payload: TAccountFormValues)
     return response[0];
 };
 
-export async function deleteAccountById(id: number): Promise<void> {
+export async function deleteAccountById(id: string): Promise<void> {
     const userId = await getSessionUserId();
 
     await db.delete(account)

@@ -21,7 +21,7 @@ export const recurringFrequency = pgEnum("recurring_frequency", [
 ]);
 
 export const budget = pgTable("budgets", {
-    id: serial().primaryKey(),
+    id: uuid().defaultRandom().primaryKey(),
     title: varchar("title", { length: 255 }).notNull(),
     notes: varchar("notes", { length: 255 }),
     budgetType: varchar("budget_type", { length: 30 }),

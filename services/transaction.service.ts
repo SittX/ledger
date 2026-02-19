@@ -8,7 +8,7 @@ export function getAllTransactionForUser(userId: string): Promise<TTransaction[]
         .where(eq(transaction.userId, userId));
 }
 
-export function getAllTransactionForAccount(accountId: number): Promise<TTransaction[]> {
+export function getAllTransactionForAccount(accountId: string): Promise<TTransaction[]> {
     return db.select().from(transaction)
         .where(eq(transaction.accountId, accountId));
 }

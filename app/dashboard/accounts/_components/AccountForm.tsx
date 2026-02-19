@@ -14,7 +14,7 @@ type NewAccountProps = {
 type EditAccountProps = {
     action: 'Edit';
     initialValues: TAccount; // Usually required for editing
-    onSubmit: (id: number, data: TAccountFormValues) => Promise<void>;
+    onSubmit: (id: string, data: TAccountFormValues) => Promise<void>;
 };
 
 type AccountFormProps = NewAccountProps | EditAccountProps;
@@ -27,10 +27,12 @@ export default function AccountForm(props: AccountFormProps) {
         defaultValues: initialValues,
     });
 
+    console.log(formState.errors);
+
     // RHF provides the validated data object here
     async function handleOnSubmit(data: TAccountFormValues) {
         if (action === 'Edit') {
-            await props.onSubmit(1, data);
+            await props.onSubmit('1', data);
         } else {
             await props.onSubmit(data);
         }

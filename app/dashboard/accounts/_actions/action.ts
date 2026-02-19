@@ -10,7 +10,7 @@ export async function accountCreateAction(data: TAccountFormValues) {
     redirect("/dashboard/accounts", RedirectType.replace);
 }
 
-export async function accountUpdateAction(accountId: number, data: TAccountFormValues) {
+export async function accountUpdateAction(accountId: string, data: TAccountFormValues) {
     await updateAccountById(accountId, data);
     redirect("/dashboard/accounts", RedirectType.replace);
 }

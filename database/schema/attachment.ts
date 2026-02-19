@@ -2,9 +2,9 @@ import {
     integer,
     pgEnum,
     pgTable,
-    serial,
     text,
     timestamp,
+    uuid,
     varchar,
 } from "drizzle-orm/pg-core";
 
@@ -15,7 +15,7 @@ export const attachmentType = pgEnum("attachment_type", [
 ]);
 
 export const attachment = pgTable("attachments", {
-    id: serial().primaryKey(),
+    id: uuid().defaultRandom().primaryKey(),
     attachmentType: attachmentType("attachment_type"),
     mimeType: varchar("mime_type", { length: 255 }),
     size: integer(),

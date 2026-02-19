@@ -4,6 +4,7 @@ import { TransactionFormSchema, TTransactionFormValues } from '@/database/schema
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { transactionCreateAction } from '../_actions/action';
+import { useRouter } from 'next/navigation';
 
 type TransactionFormProps = {
     action: 'Income' | 'Expense' | 'Transfer';
@@ -17,6 +18,17 @@ type TransactionFormProps = {
  * 3. Handle submitted value with form action
  */
 
+// TODO: Setup current datetime value to the transaction date input
+function calculateCurrentDatetime() {
+    const now = new Date();
+
+    const offset = now.getTimezoneOffset() * 60000;
+
+    const adjustedDate = new Date(now.getTime() - offset);
+
+    return adjustedDate.toISOString().substring(0, 16);
+}
+
 export default function TransactionForm({ action, accounts }: TransactionFormProps) {
     const {
         register,
@@ -24,9 +36,8 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
         formState: { errors },
     } = useForm<TTransactionFormValues>({
         resolver: zodResolver(TransactionFormSchema),
+        defaultValues: {},
     });
-
-    console.log(errors);
 
     async function onSubmit(data: TTransactionFormValues) {
         transactionCreateAction(action, data);
@@ -39,24 +50,24 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                     <section className="space-y-4">
                         <h3 className="text-lg font-semibold">{action} Account</h3>
                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                            <label className="select">
-                                <span className="label">Account</span>
-                                <select
-                                    className="select"
-                                    aria-label="Account"
-                                    {...register('accountId', { valueAsNumber: true })}>
-                                    <option value="" disabled>
-                                        Pick an account
-                                    </option>
-                                    {accounts.map((account) => {
-                                        return (
-                                            <option key={account.id} value={account.id}>
-                                                {account.title}
-                                            </option>
-                                        );
-                                    })}
-                                </select>
-                            </label>
+                            <div className="space-y-2">
+                                <label className="select">
+                                    <span className="label">Account</span>
+                                    <select className="select" aria-label="Account" {...register('accountId')}>
+                                        <option value="" disabled>
+                                            Pick an account
+                                        </option>
+                                        {accounts.map((account) => {
+                                            return (
+                                                <option key={account.id} value={account.id}>
+                                                    {account.title}
+                                                </option>
+                                            );
+                                        })}
+                                    </select>
+                                </label>
+                                {errors.accountId && <p className="text-error">{errors.accountId.message}</p>}
+                            </div>
                         </div>
                     </section>
 
@@ -75,6 +86,7 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                                     {...register('amount')}
                                     required
                                 />
+                                {errors.amount && <p className="text-error">{errors.amount.message}</p>}
                             </label>
 
                             <label className="floating-label">
@@ -86,6 +98,10 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                                     {...register('transactionDate', { valueAsDate: true })}
                                     required
                                 />
+
+                                {errors.transactionDate && (
+                                    <p className="text-error">{errors.transactionDate.message}</p>
+                                )}
                             </label>
                         </div>
                     </section>
@@ -105,6 +121,7 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                                     {...register('title')}
                                     required
                                 />
+                                {errors.title && <p className="text-error">{errors.title.message}</p>}
                             </label>
 
                             <label className="floating-label">
@@ -115,6 +132,7 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                                     placeholder="Notes (Optional)"
                                     {...register('notes')}
                                 />
+                                {errors.notes && <p className="text-error">{errors.notes.message}</p>}
                             </label>
                         </div>
                     </section>
@@ -124,36 +142,41 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                     <section className="space-y-4">
                         <h3 className="text-lg font-semibold">Details</h3>
                         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-                            <label className="select">
-                                <span className="label">Category</span>
-                                <select
-                                    className="select"
-                                    aria-label="Account type"
-                                    {...register('categoryId', { valueAsNumber: true })}>
-                                    <option value="" disabled>
-                                        Pick a category
-                                    </option>
-                                    <option value="1">Food & Dining</option>
-                                    <option value="2">Subscriptions</option>
-                                    <option value="3">Drinks</option>
-                                    <option value="4">Shopping</option>
-                                    <option value="5">Transportation</option>
-                                    <option value="6">Utilities</option>
-                                    <option value="7">Entertainment</option>
-                                    <option value="8">Health & Wellness</option>
-                                </select>
-                            </label>
+                            <div className="space-y-2">
+                                <label className="select">
+                                    <span className="label">Category</span>
+                                    <select className="select" aria-label="Account type" {...register('categoryId')}>
+                                        <option value="" disabled>
+                                            Pick a category
+                                        </option>
+                                        <option value="1">Food & Dining</option>
+                                        <option value="2">Subscriptions</option>
+                                        <option value="3">Drinks</option>
+                                        <option value="4">Shopping</option>
+                                        <option value="5">Transportation</option>
+                                        <option value="6">Utilities</option>
+                                        <option value="7">Entertainment</option>
+                                        <option value="8">Health & Wellness</option>
+                                    </select>
+                                </label>
 
-                            <label className="floating-label">
-                                <span>Payee</span>
-                                <input
-                                    type="text"
-                                    id="payee"
-                                    className="input required w-full"
-                                    placeholder="Payee"
-                                    {...register('payeeId', { valueAsNumber: true })}
-                                />
-                            </label>
+                                {errors.categoryId && <p className="text-error">{errors.categoryId.message}</p>}
+                            </div>
+
+                            <div className="space-y-2">
+                                <label className="floating-label">
+                                    <span>Payee</span>
+                                    <input
+                                        type="text"
+                                        id="payee"
+                                        className="input required w-full"
+                                        placeholder="Payee"
+                                        {...register('payeeId')}
+                                    />
+                                </label>
+
+                                {errors.payeeId && <p className="text-error">{errors.payeeId.message}</p>}
+                            </div>
                         </div>
                     </section>
 

@@ -1,7 +1,6 @@
 import {
     boolean,
     pgTable,
-    serial,
     timestamp,
     uuid,
     varchar,
@@ -9,7 +8,7 @@ import {
 import { user } from "./auth";
 
 export const payee = pgTable("payees", {
-    id: serial().primaryKey(),
+    id: uuid().defaultRandom().primaryKey(),
     name: varchar({ length: 255 }).notNull(),
     phone: varchar({ length: 20 }),
     website: varchar({ length: 255 }),

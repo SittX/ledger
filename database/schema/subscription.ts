@@ -3,7 +3,6 @@ import {
     integer,
     pgEnum,
     pgTable,
-    serial,
     timestamp,
     uuid,
     varchar,
@@ -18,7 +17,7 @@ export const subscriptionType = pgEnum("subscription_type", [
 ]);
 
 export const subscription = pgTable("subscriptions", {
-    id: serial().primaryKey(),
+    id: uuid().defaultRandom().primaryKey(),
     title: varchar({ length: 255 }).notNull(),
     notes: varchar({ length: 255 }),
     categoryId: integer("category_id").references(() => category.id),
