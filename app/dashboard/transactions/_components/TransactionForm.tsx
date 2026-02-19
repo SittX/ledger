@@ -3,7 +3,7 @@ import { TAccount } from '@/database/schema/account';
 import { TransactionFormSchema, TTransactionFormValues } from '@/database/schema/transaction';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
-import { transactionCreateAction } from '../_actions/action';
+import { transactionCreateAction } from '../_actions/transaction.action';
 import { useRouter } from 'next/navigation';
 
 type TransactionFormProps = {

@@ -1,5 +1,5 @@
 import { getAccountById } from '@/services/account.service';
-import { accountUpdateAction } from '../../_actions/action';
+import { accountUpdateAction } from '../../_actions/account.action';
 import AccountForm from '../../_components/AccountForm';
 
 export default async function AccountDetailsEditPage({ params }: { params: Promise<{ id: string }> }) {

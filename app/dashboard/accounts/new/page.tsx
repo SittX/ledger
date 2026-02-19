@@ -1,4 +1,4 @@
-import { accountCreateAction } from '../_actions/action';
+import { accountCreateAction } from '../_actions/account.action';
 import AccountForm from '../_components/AccountForm';
 
 export default function AccountCreatePage() {

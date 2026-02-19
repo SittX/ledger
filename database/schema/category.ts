@@ -1,7 +1,9 @@
-import { boolean, foreignKey, integer, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
+import { boolean, foreignKey, pgTable, uuid, varchar } from "drizzle-orm/pg-core";
 import { user } from "./auth";
+import { createSelectSchema } from "drizzle-zod";
+import z from "zod";
 
-// System/base categories - no user_id, these are application-provided defaults
+// System/base categories - isSystemDefault : True, these are application-provided defaults
 export const category = pgTable("categories", {
     id: uuid().defaultRandom().primaryKey(),
     title: varchar({ length: 255 }).notNull(),
@@ -21,3 +23,19 @@ export const category = pgTable("categories", {
         }),
     ],
 );
+
+
+export const CategorySchema = createSelectSchema(category);
+
+export const CategoryFormValuesSchema = CategorySchema.omit({
+    id: true,
+    userId: true,
+    isSystemDefault: true
+}).extend({
+    color: CategorySchema.shape.color.optional(),
+    icon: CategorySchema.shape.icon.optional(),
+    parentId: CategorySchema.shape.parentId.optional(),
+});
+
+export type TCategoryFormValues = z.infer<typeof CategoryFormValuesSchema>;
+export type TCategory = z.infer<typeof CategorySchema>;

@@ -1,20 +1,34 @@
 {
-    "version": "7",
-    "dialect": "postgresql",
-    "entries": [
-        {
-            "idx": 0,
-            "version": "7",
-            "when": 1770684943808,
-            "tag": "20260210005542_neon_auth_core",
-            "breakpoints": true
-        },
-        {
-            "idx": 1,
-            "version": "7",
-            "when": 1770684943809,
-            "tag": "20260210005543_wonderful_riptide",
-            "breakpoints": true
-        }
-    ]
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1770684943808,
+      "tag": "20260210005542_neon_auth_core",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1770684943809,
+      "tag": "20260210005543_wonderful_riptide",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1771515866029,
+      "tag": "20260219154426_flaky_alex_power",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1771516290824,
+      "tag": "20260219155130_wide_liz_osborn",
+      "breakpoints": true
+    }
+  ]
 }

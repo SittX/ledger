@@ -1,0 +1,1 @@
+ALTER TABLE "categories" ADD COLUMN "isSystemDefault" boolean DEFAULT false;--> statement-breakpoint
