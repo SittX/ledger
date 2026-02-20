@@ -4,11 +4,14 @@ import { TransactionFormSchema, TTransactionFormValues } from '@/database/schema
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { transactionCreateAction } from '../_actions/transaction.action';
-import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { getAllCategoryForUser } from '@/services/category.service';
+import { TCategory } from '@/database/schema/category';
 
 type TransactionFormProps = {
     action: 'Income' | 'Expense' | 'Transfer';
     accounts: TAccount[];
+    categories: TCategory[];
 };
 
 /**
@@ -29,7 +32,18 @@ function calculateCurrentDatetime() {
     return adjustedDate.toISOString().substring(0, 16);
 }
 
-export default function TransactionForm({ action, accounts }: TransactionFormProps) {
+export default function TransactionForm({ action, accounts, categories }: TransactionFormProps) {
+    // const [categories, setCategories] = useState<TCategory[] | undefined>(undefined);
+
+    // useEffect(() => {
+    //     async function asyncFunc() {
+    //         const categories = await getAllCategoryForUser();
+    //         setCategories(categories);
+    //     }
+
+    //     asyncFunc();
+    // }, []);
+
     const {
         register,
         handleSubmit,
@@ -149,34 +163,33 @@ export default function TransactionForm({ action, accounts }: TransactionFormPro
                                         <option value="" disabled>
                                             Pick a category
                                         </option>
-                                        <option value="1">Food & Dining</option>
-                                        <option value="2">Subscriptions</option>
-                                        <option value="3">Drinks</option>
-                                        <option value="4">Shopping</option>
-                                        <option value="5">Transportation</option>
-                                        <option value="6">Utilities</option>
-                                        <option value="7">Entertainment</option>
-                                        <option value="8">Health & Wellness</option>
+                                        {categories.map((category, index) => {
+                                            return (
+                                                <option key={index} value={category.id}>
+                                                    {category.title}
+                                                </option>
+                                            );
+                                        })}
                                     </select>
                                 </label>
 
                                 {errors.categoryId && <p className="text-error">{errors.categoryId.message}</p>}
                             </div>
 
-                            <div className="space-y-2">
+                            {/* <div className="space-y-2">
                                 <label className="floating-label">
                                     <span>Payee</span>
                                     <input
                                         type="text"
                                         id="payee"
-                                        className="input required w-full"
+                                        className="input w-full"
                                         placeholder="Payee"
                                         {...register('payeeId')}
                                     />
                                 </label>
 
                                 {errors.payeeId && <p className="text-error">{errors.payeeId.message}</p>}
-                            </div>
+                            </div> */}
                         </div>
                     </section>
 

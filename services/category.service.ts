@@ -2,14 +2,26 @@ import { db } from "@/database";
 import { category } from "@/database/schema";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
-import { eq } from 'drizzle-orm';
-import { TCategory } from "@/database/schema/category";
+import { eq, or } from 'drizzle-orm';
+import { TCategory, TCategoryFormValues } from "@/database/schema/category";
+
+export async function createNewCategory(data: TCategoryFormValues) {
+    const userId = await getSessionUserId();
+
+    await db.insert(category)
+        .values({ ...data, userId })
+        .returning();
+}
 
 export async function getAllCategoryForUser(): Promise<TCategory[]> {
     const userId = await getSessionUserId();
 
-    return db.select().from(category)
-        .where(eq(category.userId, userId));
+    return db.select().from(category).where(
+        or(
+            eq(category.userId, userId),
+            eq(category.isSystemDefault, true)
+        )
+    );
 }
 
 // Utility functions

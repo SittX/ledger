@@ -11,7 +11,7 @@ export const category = pgTable("categories", {
     categoryType: varchar("category_type", { length: 30 }),
     icon: varchar({ length: 10 }),
     color: varchar({ length: 10 }).default("2fc2db"),
-    isSystemDefault: boolean().default(false),
+    isSystemDefault: boolean("is_system_default").default(false),
     parentId: uuid("parent_id"),
     userId: uuid("user_id").references(() => user.id)
 },

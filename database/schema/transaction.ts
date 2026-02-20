@@ -17,6 +17,7 @@ import { InferSelectModel } from "drizzle-orm";
 import { goal } from "./goal";
 import { subscription } from "./subscription";
 import { attachment } from "./attachment";
+import { payee } from './payee';
 
 // Forward references - these will be imported when needed
 // goal, subscription, attachment, payee tables
@@ -48,6 +49,7 @@ export const transaction = pgTable("transactions", {
 export const TransactionCreateSchema = createInsertSchema(transaction);
 export const TransactionFormSchema = TransactionCreateSchema.omit({
     userId: true,
+    payeeId: true,
     createdAt: true,
     createdBy: true,
     updatedAt: true,

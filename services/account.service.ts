@@ -1,9 +1,8 @@
 import { db } from "@/database";
 import { account } from "@/database/schema";
 import { AccountFormSchema, TAccount, TAccountFormValues } from "@/database/schema/account";
-import { auth } from "@/lib/auth";
+import { getSessionUserId } from "@/lib/auth-utils";
 import { and, eq } from "drizzle-orm";
-import { headers } from "next/headers";
 
 /**
  * 1. GetAllAccount
@@ -56,7 +55,6 @@ export async function togglePrimaryAccount(id: string, status: boolean, formData
         .where(and(eq(account.id, id), eq(account.userId, userId)));
 }
 
-
 export async function updateAccountById(id: string, payload: TAccountFormValues): Promise<TAccount | undefined> {
     const userId = await getSessionUserId();
 
@@ -77,20 +75,4 @@ export async function deleteAccountById(id: string): Promise<void> {
         .where(and(eq(account.id, id), eq(account.userId, userId)));
 }
 
-
-// Utility functions
-async function getSessionUserId() {
-    const sessionHeaders = await headers();
-
-    const session = await auth.api.getSession({
-        headers: sessionHeaders,
-    });
-
-    if (!session || !session.user) {
-        throw new Error("Unauthorized: You must be logged in to create an account.");
-    }
-
-    const userId = session.user.id;
-    return userId;
-}
 
