@@ -1,9 +1,35 @@
-// Here we need to share toggle state between the sidebar and Header menu
-export default function Header() {
+ "use client";
+
+import type { MouseEventHandler } from "react";
+import { Menu, X } from "lucide-react";
+
+interface HeaderProps {
+  onToggleSidebar?: MouseEventHandler<HTMLButtonElement>;
+  isSidebarOpen?: boolean;
+}
+
+export default function Header({
+  onToggleSidebar,
+  isSidebarOpen,
+}: HeaderProps) {
   return (
     <div className="navbar bg-base-300 shadow-sm">
-      <div className="navbar-start"></div>
-      <div className="navbar-center"></div>
+      <div className="navbar-start">
+        <button
+          type="button"
+          aria-label={isSidebarOpen ? "Close navigation menu" : "Open navigation menu"}
+          aria-expanded={isSidebarOpen ?? false}
+          onClick={onToggleSidebar}
+          className="btn btn-ghost btn-circle mr-2 lg:hidden"
+        >
+          {isSidebarOpen ? (
+            <X className="h-5 w-5" />
+          ) : (
+            <Menu className="h-5 w-5" />
+          )}
+        </button>
+      </div>
+      <div className="navbar-center" />
       <div className="navbar-end">
         <button className="btn btn-ghost btn-circle">
           <div className="indicator">

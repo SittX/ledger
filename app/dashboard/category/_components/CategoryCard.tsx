@@ -8,7 +8,7 @@ type CategoryCardProps = {
 
 export default function CategoryCard({ data }: CategoryCardProps) {
     return (
-        <div className="card bg-base-300 w-50">
+        <div className="card bg-base-300 w-80">
             <div className="card-body space-y-4">
                 <div className="flex items-center gap-4">
                     <Home size={18} />

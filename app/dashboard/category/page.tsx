@@ -2,12 +2,42 @@ import { getAllCategoryForUser } from '@/services/category.service';
 import { Plus } from 'lucide-react';
 import Link from 'next/link';
 import CategoryCard from './_components/CategoryCard';
+import { Suspense } from 'react';
+import { TCategory } from '@/database/schema/category';
 
-export default async function CategoryPage() {
-    const categories = await getAllCategoryForUser();
-    const systemCategories = categories.filter((category) => category.isSystemDefault);
+async function CategoryList() {
+    const categories: TCategory[] = await getAllCategoryForUser();
+    const systemCategories = categories.filter((category) => category.isSystemDefault).slice(0, 6);
     const userCategories = categories.filter((category) => !category.isSystemDefault);
 
+    return (
+        <section className="space-y-8">
+            <div className="space-y-2">
+                <h3 className="text-lg font-semibold">User Created Categories</h3>
+                <Suspense>
+                    <div className="flex flex-wrap gap-6">
+                        {userCategories.map((category) => {
+                            return <CategoryCard data={category} key={category.id} />;
+                        })}
+                    </div>
+                </Suspense>
+            </div>
+
+            <div className="space-y-2">
+                <h3 className="text-lg font-semibold">System Categories</h3>
+                <Suspense>
+                    <div className="flex flex-wrap gap-6">
+                        {systemCategories.map((category) => {
+                            return <CategoryCard data={category} key={category.id} />;
+                        })}
+                    </div>
+                </Suspense>
+            </div>
+        </section>
+    );
+}
+
+export default function CategoryPage() {
     return (
         <div className="space-y-6">
             {/* Header Section */}
@@ -27,25 +57,9 @@ export default async function CategoryPage() {
             </div>
 
             {/* Body Section */}
-            <section className="space-y-8">
-                <div className="space-y-2">
-                    <h3 className="text-lg font-semibold">User Created Categories</h3>
-                    <div className="flex flex-wrap gap-6">
-                        {userCategories.map((category) => {
-                            return <CategoryCard data={category} key={category.id} />;
-                        })}
-                    </div>
-                </div>
-
-                <div className="space-y-2">
-                    <h3 className="text-lg font-semibold">System Categories</h3>
-                    <div className="flex flex-wrap gap-6">
-                        {systemCategories.map((category) => {
-                            return <CategoryCard data={category} key={category.id} />;
-                        })}
-                    </div>
-                </div>
-            </section>
+            <Suspense>
+                <CategoryList />
+            </Suspense>
         </div>
     );
 }

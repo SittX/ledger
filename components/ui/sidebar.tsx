@@ -17,9 +17,11 @@ import { authClient } from "@/lib/auth-client";
 
 interface SidebarProps {
   className?: string;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export default function Sidebar({ className }: SidebarProps) {
+export default function Sidebar({ className, isOpen, onClose }: SidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
@@ -42,17 +44,15 @@ export default function Sidebar({ className }: SidebarProps) {
     return pathname.startsWith(href);
   };
 
-  return (
-    <aside
-      className={cn(
-        "flex flex-col h-screen bg-background bg-base-300 shadow-sm border-divider transition-all duration-300 ease-in-out",
-        isCollapsed ? "w-16" : "w-64",
-        className,
-      )}
-    >
+  const handleNavClick = () => {
+    onClose?.();
+  };
+
+  const renderSidebarContent = (collapsed: boolean) => (
+    <>
       {/* Header Section */}
       <div className="flex items-center justify-between p-4 border-b border-divider">
-        {!isCollapsed && (
+        {!collapsed && (
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
               <span className="text-primary-foreground font-bold text-sm">
@@ -62,17 +62,17 @@ export default function Sidebar({ className }: SidebarProps) {
             <span className="font-semibold text-lg">Ledger</span>
           </div>
         )}
-        {isCollapsed && (
+        {collapsed && (
           <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center mx-auto">
             <span className="text-primary-foreground font-bold text-sm">L</span>
           </div>
         )}
         <button
           onClick={toggleSidebar}
-          aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-          className="btn ml-auto"
+          aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
+          className={cn("btn ml-auto", "hidden md:inline-flex")}
         >
-          {isCollapsed ? (
+          {collapsed ? (
             <ChevronRight className="w-4 h-4" />
           ) : (
             <ChevronLeft className="w-4 h-4" />
@@ -85,9 +85,9 @@ export default function Sidebar({ className }: SidebarProps) {
         {menuSections.map((section, sectionIndex) => (
           <div
             key={section.title}
-            className={cn("mb-6", isCollapsed && "mb-4")}
+            className={cn("mb-6", collapsed && "mb-4")}
           >
-            {!isCollapsed && (
+            {!collapsed && (
               <div className="px-4 mb-2">
                 <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
                   {section.title}
@@ -102,12 +102,13 @@ export default function Sidebar({ className }: SidebarProps) {
                   <NextLink
                     key={item.name}
                     href={item.href}
+                    onClick={handleNavClick}
                     className={cn(
                       "flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg transition-colors",
                       "hover:bg-default-100",
                       active && "bg-primary/10 text-primary font-medium",
                       !active && "text-foreground",
-                      isCollapsed && "justify-center px-2",
+                      collapsed && "justify-center px-2",
                     )}
                   >
                     <Icon
@@ -117,7 +118,7 @@ export default function Sidebar({ className }: SidebarProps) {
                         !active && "text-default-600",
                       )}
                     />
-                    {!isCollapsed && (
+                    {!collapsed && (
                       <span className={cn("text-sm", active && "font-medium")}>
                         {item.name}
                       </span>
@@ -126,7 +127,7 @@ export default function Sidebar({ className }: SidebarProps) {
                 );
               })}
             </div>
-            {sectionIndex < menuSections.length - 1 && !isCollapsed && (
+            {sectionIndex < menuSections.length - 1 && !collapsed && (
               <div className="divider mt-4 mx-4" />
             )}
           </div>
@@ -143,7 +144,7 @@ export default function Sidebar({ className }: SidebarProps) {
               "hover:bg-default-100 text-foreground",
               isActive("/dashboard/settings") &&
                 "bg-primary/10 text-primary font-medium",
-              isCollapsed && "justify-center px-2",
+              collapsed && "justify-center px-2",
             )}
           >
             <Settings
@@ -154,7 +155,7 @@ export default function Sidebar({ className }: SidebarProps) {
                   : "text-default-600",
               )}
             />
-            {!isCollapsed && (
+            {!collapsed && (
               <span
                 className={cn(
                   "text-sm",
@@ -169,11 +170,11 @@ export default function Sidebar({ className }: SidebarProps) {
           <div
             className={cn(
               "flex items-center gap-3 px-4 py-2.5 mx-2 rounded-lg",
-              isCollapsed && "justify-center px-2",
+              collapsed && "justify-center px-2",
             )}
           >
             <Moon className="w-5 h-5 text-default-600" />
-            {!isCollapsed && (
+            {!collapsed && (
               <>
                 <span className="text-sm text-foreground flex-1">
                   Dark mode
@@ -186,7 +187,7 @@ export default function Sidebar({ className }: SidebarProps) {
                 /> */}
               </>
             )}
-            {isCollapsed && (
+            {collapsed && (
               // <Switch
               //   isSelected={isDarkMode}
               //   onChange={() => setIsDarkMode(!isDarkMode)}
@@ -201,7 +202,7 @@ export default function Sidebar({ className }: SidebarProps) {
 
       {/* User Profile Section */}
       <div className="border-t border-divider p-4">
-        {!isCollapsed ? (
+        {!collapsed ? (
           <div className="space-y-3">
             <div className="flex items-center gap-3">
               <div className="flex-1 min-w-0">
@@ -239,6 +240,45 @@ export default function Sidebar({ className }: SidebarProps) {
           </div>
         )}
       </div>
-    </aside>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop sidebar */}
+      <aside
+        className={cn(
+          "hidden md:flex flex-col h-screen bg-background bg-base-300 shadow-sm border-divider transition-all duration-300 ease-in-out",
+          isCollapsed ? "w-16" : "w-64",
+          className,
+        )}
+      >
+        {renderSidebarContent(isCollapsed)}
+      </aside>
+
+      {/* Mobile overlay sidebar */}
+      <div
+        className={cn(
+          "md:hidden fixed inset-0 z-40 bg-black/40 transition-opacity duration-200",
+          isOpen
+            ? "opacity-100 pointer-events-auto"
+            : "opacity-0 pointer-events-none",
+        )}
+        aria-hidden={!isOpen}
+        role="dialog"
+        aria-modal="true"
+        onClick={onClose}
+      >
+        <aside
+          className={cn(
+            "fixed inset-y-0 left-0 z-50 w-64 bg-base-300 shadow-lg flex flex-col h-full transition-transform duration-300 ease-in-out",
+            isOpen ? "translate-x-0" : "-translate-x-full",
+          )}
+          onClick={(event) => event.stopPropagation()}
+        >
+          {renderSidebarContent(false)}
+        </aside>
+      </div>
+    </>
   );
 }
